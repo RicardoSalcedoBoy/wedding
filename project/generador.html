@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generador de invitaciones</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Georgia, serif; background: #f9f3eb; color: #3a2a1a; padding: 40px 20px; }
+  h1 { font-size: 28px; font-style: italic; font-weight: 300; color: #5a3e28; margin-bottom: 8px; }
+  p.sub { font-size: 13px; letter-spacing: 2px; color: #a08060; text-transform: uppercase; margin-bottom: 40px; }
+
+  .form { max-width: 520px; margin: 0 auto 48px; }
+  label { display: block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #a08060; margin-bottom: 6px; margin-top: 20px; }
+  input, textarea {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid #d4c0a8; background: #fdf9f4;
+    font-family: Georgia, serif; font-size: 15px; color: #3a2a1a;
+    outline: none;
+  }
+  textarea { height: 100px; resize: vertical; }
+  .hint { font-size: 12px; color: #a08060; margin-top: 4px; font-style: italic; }
+
+  button {
+    margin-top: 24px; padding: 12px 32px;
+    border: 1px solid #8a6a4a; background: #3a2a1a;
+    color: #e8d8c4; font-family: Georgia, serif;
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer;
+  }
+  button:hover { background: #5a3e28; }
+
+  .results { max-width: 520px; margin: 0 auto; }
+  .card {
+    background: #fdf9f4; border: 1px solid #d4c0a8;
+    padding: 24px; margin-bottom: 24px;
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-size: 22px; font-style: italic; color: #3a2a1a; margin-bottom: 6px; }
+  .card-url {
+    font-size: 11px; color: #a08060; word-break: break-all;
+    margin-bottom: 16px; font-family: monospace;
+  }
+  .card-qr img { display: block; border: 1px solid #e0d0c0; }
+  .download-btn {
+    display: inline-block; padding: 8px 20px; margin-top: 12px;
+    border: 1px solid #8a6a4a; color: #5a3e28;
+    font-family: Georgia, serif; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; background: transparent;
+  }
+  .download-btn:hover { background: #f0e8dc; }
+  .divider { height: 1px; background: #e0d0c0; margin: 40px 0; }
+  .error { color: #c0392b; font-size: 13px; margin-top: 8px; }
+
+  @media (max-width: 500px) {
+    .card { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div style="max-width: 520px; margin: 0 auto;">
+  <h1>Generador de invitaciones</h1>
+  <p class="sub">Jesús &amp; Ana · 19 Marzo 2027</p>
+</div>
+
+<div class="form">
+  <label>URL base de la invitación</label>
+  <input type="text" id="baseUrl" value="http://localhost:8080/Invitacion.dc.html" />
+  <p class="hint">Cambia esto por tu dominio cuando subas el sitio.</p>
+
+  <label>Invitados (un par por línea, separados por coma)</label>
+  <textarea id="guests" placeholder="Jesús, Ana&#10;Carlos, María&#10;Roberto, Laura"></textarea>
+  <p class="hint">Formato: Nombre1, Nombre2 — o solo un nombre si es invitado individual.</p>
+
+  <button onclick="generar()">Generar QRs</button>
+</div>
+
+<div class="divider"></div>
+<div class="results" id="results"></div>
+
+<script>
+function encodeGuests(g1, g2) {
+  return btoa(unescape(encodeURIComponent(g1 + '|' + g2)));
+}
+
+function qrUrl(data, size) {
+  return 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size +
+    '&color=3a2a1a&bgcolor=fdf9f4&data=' + encodeURIComponent(data);
+}
+
+function generar() {
+  const baseUrl = document.getElementById('baseUrl').value.trim();
+  const lines = document.getElementById('guests').value.trim().split('\n').filter(l => l.trim());
+  const container = document.getElementById('results');
+  container.innerHTML = '';
+
+  if (!lines.length) {
+    container.innerHTML = '<p class="error">Escribe al menos un invitado.</p>';
+    return;
+  }
+
+  lines.forEach(function(line) {
+    const parts = line.split(',').map(function(s) { return s.trim(); });
+    const g1 = parts[0] || '';
+    const g2 = parts[1] || '';
+    const encoded = encodeGuests(g1, g2);
+    const url = baseUrl + '?i=' + encoded;
+    const nameLabel = g2 ? g1 + ' & ' + g2 : g1;
+    const imgSrc = qrUrl(url, 180);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="card-qr">' +
+        '<img src="' + imgSrc + '" width="180" height="180" alt="QR ' + nameLabel + '" crossorigin="anonymous" />' +
+      '</div>' +
+      '<div class="card-info">' +
+        '<div class="card-name">' + nameLabel + '</div>' +
+        '<div class="card-url">' + url + '</div>' +
+        '<a class="download-btn" href="' + imgSrc + '" download="QR-' + nameLabel + '.png" target="_blank">Descargar QR</a>' +
+      '</div>';
+
+    container.appendChild(card);
+  });
+}
+</script>
+</body>
+</html>

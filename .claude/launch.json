@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "invitacion",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/ricardosalcedo/Documents/Projects/invitaci-n-de-boda-interactiva/project", "-l", "8081", "--no-clipboard"],
+      "port": 8081
+    }
+  ]
+}
