@@ -4,8 +4,8 @@
     {
       "name": "invitacion",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "/Users/ricardosalcedo/Documents/Projects/invitaci-n-de-boda-interactiva/project", "-l", "8081", "--no-clipboard"],
-      "port": 8081
+      "runtimeArgs": ["serve", "/Users/ricardosalcedo/Documents/Projects/invitaci-n-de-boda-interactiva", "-l", "8082", "--no-clipboard"],
+      "port": 8082
     }
   ]
 }
