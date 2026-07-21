@@ -71,9 +71,10 @@
     <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
     <div style="
       font-family: 'Cormorant Garamond', serif;
-      font-size: 30px; font-weight: 300; font-style: italic;
+      font-size: 20px; font-weight: 300;
       color: #3a2a1a;
-      text-align: center; line-height: 1.2;
+      text-align: center; line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 5px;
       padding: 0 24px;
       animation: {{ namesAnim }};
     ">Con todo nuestro amor</div>
@@ -147,16 +148,28 @@
 
     <sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
       <div style="animation: fadeInStay 1.2s ease both;">
-        <!-- No-name default: elegant centerpiece -->
+        <!-- No-name default: text → divider -->
         <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
-        <div style="
-          font-size: 30px; font-weight: 300; font-style: italic;
-          line-height: 1.2; color: #3a2a1a;
-          margin-bottom: 64px;
-        ">Con todo nuestro amor</div>
+        <p style="
+          font-size: 19px; font-weight: 300; font-style: italic;
+          line-height: 1.8; color: #5a3e28;
+          max-width: 320px; margin: 0 auto 48px;
+        ">Porque has sido parte de nuestra historia y tu cariño nos ha acompañado siempre, nos complace invitarte a nuestro enlace matrimonial</p>
+
+        <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 48px;">
+          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="2.5" fill="#c4a882"/>
+            <circle cx="10" cy="3" r="1.2" fill="#c4a882"/>
+            <circle cx="10" cy="17" r="1.2" fill="#c4a882"/>
+            <circle cx="3" cy="10" r="1.2" fill="#c4a882"/>
+            <circle cx="17" cy="10" r="1.2" fill="#c4a882"/>
+          </svg>
+          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+        </div>
         </sc-if>
 
-        <!-- Named guests heading -->
+        <!-- Named guests: heading → names → divider → text -->
         <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
         <div style="
           font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
@@ -180,9 +193,7 @@
         <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
         <div style="margin-bottom: 64px;"></div>
         </sc-if>
-        </sc-if>
 
-        <!-- Divider -->
         <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 64px;">
           <div style="height: 1px; width: 48px; background: #c4a882;"></div>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -195,7 +206,6 @@
           <div style="height: 1px; width: 48px; background: #c4a882;"></div>
         </div>
 
-        <!-- Persistent invitation text -->
         <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
@@ -203,12 +213,13 @@
           max-width: 320px; margin: 0 auto 40px;
         ">Porque han sido parte de nuestra historia y su cariño nos ha acompañado siempre, nos complace invitarlos a nuestro enlace matrimonial</p>
         </sc-if>
-        <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
           line-height: 1.8; color: #5a3e28;
           max-width: 320px; margin: 0 auto 40px;
         ">Porque has sido parte de nuestra historia y tu cariño nos ha acompañado siempre, nos complace invitarte a nuestro enlace matrimonial</p>
+        </sc-if>
         </sc-if>
 
         <div style="font-size: 13px; letter-spacing: 4px; color: #a08060; text-transform: uppercase;">Scroll ↓</div>
@@ -370,7 +381,7 @@
       margin-bottom: 8px;
     ">Parroquia Ntra. Sra. del Rosario de Fátima</div>
     <div style="font-size: 13px; color: #7a5a3a; margin-bottom: 36px; font-style: italic;">
-      Guadalupe Victoria y Av. Zacatecas, Col. San Benito, Hermosillo
+      Guadalupe Victoria y Av. Zacatecas, Col. San Benito
     </div>
 
     <!-- Hand-drawn SVG map — Iglesia -->
@@ -466,7 +477,7 @@
       margin-bottom: 8px;
     ">Jardín Santa Lucía</div>
     <div style="font-size: 13px; color: #7a5a3a; margin-bottom: 36px; font-style: italic;">
-      Camino a La Victoria (1.5 km del Blvd. Enrique Mazón), La Victoria, Hermosillo
+      Camino a La Victoria (1.5 km del Blvd. Enrique Mazón), La Victoria
     </div>
 
     <!-- Hand-drawn SVG map -->
