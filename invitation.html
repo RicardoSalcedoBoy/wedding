@@ -361,44 +361,52 @@
 
         <!-- Grid texture (very subtle) -->
         <line x1="0" y1="70" x2="340" y2="70" stroke="#ede8e0" stroke-width="0.5"/>
-        <line x1="0" y1="140" x2="340" y2="140" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="0" y1="210" x2="340" y2="210" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="85" y1="0" x2="85" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
-        <line x1="170" y1="0" x2="170" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
-        <line x1="255" y1="0" x2="255" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
+        <line x1="200" y1="0" x2="200" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
 
-        <!-- Calle Guadalupe Victoria — vertical road -->
-        <rect x="150" y="0" width="16" height="280" fill="#ddd8d0"/>
-        <rect x="154" y="0" width="8" height="280" fill="#e8e4dc"/>
-        <text transform="translate(146, 200) rotate(-90)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Calle Guadalupe Victoria</text>
+        <!-- Parque del Maestro — green park, upper-left -->
+        <rect x="8" y="22" width="118" height="70" rx="2" fill="#dbe7ce"/>
+        <text x="67" y="55" font-family="Georgia, serif" font-size="7.5" fill="#6a7a54" text-anchor="middle">Parque del</text>
+        <text x="67" y="66" font-family="Georgia, serif" font-size="7.5" fill="#6a7a54" text-anchor="middle">Maestro</text>
 
-        <!-- Av. Zacatecas — horizontal road -->
-        <rect x="0" y="120" width="340" height="16" fill="#ddd8d0"/>
-        <rect x="0" y="124" width="340" height="8" fill="#e8e4dc"/>
-        <text x="14" y="116" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. Zacatecas</text>
+        <!-- Av. Tamaulipas — horizontal road, top -->
+        <rect x="0" y="14" width="340" height="13" fill="#ddd8d0"/>
+        <rect x="0" y="17" width="340" height="7" fill="#e8e4dc"/>
+        <text x="200" y="11" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. Tamaulipas</text>
 
-        <!-- Neighborhood label -->
-        <text x="40" y="40" font-family="Georgia, serif" font-size="7" fill="#8a7a6a">Col. San Benito</text>
+        <!-- Av. Zacatecas — horizontal road, middle -->
+        <rect x="0" y="150" width="340" height="16" fill="#ddd8d0"/>
+        <rect x="0" y="154" width="340" height="8" fill="#e8e4dc"/>
+        <text x="14" y="146" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. Zacatecas</text>
 
-        <!-- Church marker — at the corner -->
-        <circle cx="185" cy="95" r="10" fill="#3a2a1a"/>
-        <polygon points="185,122 177,102 193,102" fill="#3a2a1a"/>
+        <!-- Av. San Luis Potosí — horizontal road, bottom -->
+        <rect x="0" y="252" width="340" height="13" fill="#ddd8d0"/>
+        <rect x="0" y="255" width="340" height="7" fill="#e8e4dc"/>
+        <text x="120" y="277" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. San Luis Potosí</text>
+
+        <!-- C. Juan Aldama — vertical road, right -->
+        <rect x="296" y="0" width="14" height="280" fill="#ddd8d0"/>
+        <rect x="299" y="0" width="8" height="280" fill="#e8e4dc"/>
+        <text transform="translate(293, 90) rotate(90)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">C. Juan Aldama</text>
+
+        <!-- Church marker — north side of Av. Zacatecas -->
+        <circle cx="150" cy="118" r="10" fill="#3a2a1a"/>
+        <polygon points="150,146 142,126 158,126" fill="#3a2a1a"/>
         <!-- Little cross inside the pin -->
-        <line x1="185" y1="90" x2="185" y2="100" stroke="#faf5ee" stroke-width="1.5"/>
-        <line x1="181" y1="94" x2="189" y2="94" stroke="#faf5ee" stroke-width="1.5"/>
+        <line x1="150" y1="113" x2="150" y2="123" stroke="#faf5ee" stroke-width="1.5"/>
+        <line x1="146" y1="117" x2="154" y2="117" stroke="#faf5ee" stroke-width="1.5"/>
 
         <!-- Church label -->
-        <rect x="196" y="70" width="128" height="34" rx="2" fill="#fefcf8" stroke="#c4a882" stroke-width="0.8"/>
-        <text x="260" y="84" font-family="Georgia, serif" font-size="8.5" fill="#3a2a1a" text-anchor="middle" font-style="italic">Parroquia del Rosario</text>
-        <text x="260" y="97" font-family="Georgia, serif" font-size="7" fill="#8a6a4a" text-anchor="middle">Hermosillo, Sonora</text>
-        <!-- Connector line from label to pin -->
-        <line x1="195" y1="87" x2="196" y2="87" stroke="#c4a882" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <rect x="158" y="92" width="128" height="34" rx="2" fill="#fefcf8" stroke="#c4a882" stroke-width="0.8"/>
+        <text x="222" y="106" font-family="Georgia, serif" font-size="8.5" fill="#3a2a1a" text-anchor="middle" font-style="italic">Parroquia del Rosario</text>
+        <text x="222" y="119" font-family="Georgia, serif" font-size="7" fill="#8a6a4a" text-anchor="middle">Hermosillo, Sonora</text>
 
         <!-- Scale bar -->
-        <line x1="12" y1="268" x2="62" y2="268" stroke="#8a7060" stroke-width="1.2"/>
-        <line x1="12" y1="264" x2="12" y2="272" stroke="#8a7060" stroke-width="1.2"/>
-        <line x1="62" y1="264" x2="62" y2="272" stroke="#8a7060" stroke-width="1.2"/>
-        <text x="37" y="278" font-family="Georgia, serif" font-size="7" fill="#5a4a3a" text-anchor="middle">100 m</text>
+        <line x1="12" y1="240" x2="62" y2="240" stroke="#8a7060" stroke-width="1.2"/>
+        <line x1="12" y1="236" x2="12" y2="244" stroke="#8a7060" stroke-width="1.2"/>
+        <line x1="62" y1="236" x2="62" y2="244" stroke="#8a7060" stroke-width="1.2"/>
+        <text x="37" y="234" font-family="Georgia, serif" font-size="7" fill="#5a4a3a" text-anchor="middle">100 m</text>
       </svg>
     </div>
 
