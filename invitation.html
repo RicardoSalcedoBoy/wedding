@@ -67,6 +67,20 @@
       </svg>
     </div>
 
+    <!-- No-name default: elegant centerpiece -->
+    <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
+    <div style="
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px; font-weight: 300; font-style: italic;
+      color: #3a2a1a;
+      text-align: center; line-height: 1.25;
+      padding: 0 32px;
+      animation: {{ namesAnim }};
+    ">Con todo<br/>nuestro amor</div>
+    </sc-if>
+
+    <!-- Named guests -->
+    <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-family: 'Cormorant Garamond', serif;
       font-size: 14px; letter-spacing: 4px; text-transform: uppercase;
@@ -85,6 +99,7 @@
       text-align: center; line-height: 1.1;
       animation: {{ namesAnim }};
     ">{{ guest1 }}<sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}"><br/><span style="font-size: 30px; color: #8a6a4a; letter-spacing: 8px; font-style: normal;">&amp;</span><br/>{{ guest2 }}</sc-if></div>
+    </sc-if>
 
     <div style="margin-top: 32px; opacity: 0.35;">
       <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
@@ -132,7 +147,17 @@
 
     <sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
       <div style="animation: fadeInStay 1.2s ease both;">
-        <!-- Names heading -->
+        <!-- No-name default: elegant centerpiece -->
+        <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
+        <div style="
+          font-size: 44px; font-weight: 300; font-style: italic;
+          line-height: 1.25; color: #3a2a1a;
+          margin-bottom: 64px;
+        ">Con todo<br/>nuestro amor</div>
+        </sc-if>
+
+        <!-- Named guests heading -->
+        <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
         <div style="
           font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
           color: #8a6a4a; font-weight: 300; margin-bottom: 28px;
@@ -154,6 +179,7 @@
         </sc-if>
         <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
         <div style="margin-bottom: 64px;"></div>
+        </sc-if>
         </sc-if>
 
         <!-- Divider -->
@@ -177,7 +203,7 @@
           max-width: 320px; margin: 0 auto 40px;
         ">Porque han sido parte de nuestra historia y su cariño nos ha acompañado siempre, nos complace invitarlos a nuestro enlace matrimonial</p>
         </sc-if>
-        <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
           line-height: 1.8; color: #5a3e28;
@@ -239,7 +265,7 @@
       margin-bottom: 48px;
     ">Nos encantaría que nos acompañen a celebrar nuestro amor el <strong style="font-style: normal; font-weight: 500;">viernes 19 de marzo de 2027</strong> en Hermosillo, Sonora. La ceremonia se llevará a cabo en la <em>Parroquia de Nuestra Señora del Rosario de Fátima</em> y, posteriormente, compartiremos una recepción en el <em>Jardín Santa Lucía</em>. Compartir este día con ustedes lo hará aún más especial. Esperamos contar con su presencia.</p>
     </sc-if>
-    <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #4a3020;
@@ -602,7 +628,7 @@
 class Component extends DCLogic {
   state = {
     phase: 0,
-    guest1: 'Daniel',
+    guest1: '',
     guest2: '',
   };
 
@@ -613,7 +639,7 @@ class Component extends DCLogic {
 
     // Read encoded names from URL param ?i=base64(g1|g2)
     const params = new URLSearchParams(window.location.search);
-    let g1 = 'Daniel', g2 = '';
+    let g1 = '', g2 = '';
     const encoded = params.get('i');
     if (encoded) {
       try {
@@ -647,8 +673,11 @@ class Component extends DCLogic {
     return {
       guest1,
       guest2,
+      hasName: !!guest1,
+      noGuest: !guest1,
       hasGuest2: !!guest2,
-      singleGuest: !guest2,
+      singleGuest: !!guest1 && !guest2,
+      notPair: !guest2,
       showOverlay: phase < 2,
       overlayOpacity: phase === 1 ? 0 : 1,
       namesAnim: phase === 0
