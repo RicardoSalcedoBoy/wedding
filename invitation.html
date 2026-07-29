@@ -7,6 +7,7 @@
 </head>
 <body>
 <x-dc>
+
 <helmet>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -14,7 +15,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { background: #f9f3eb; }
+    html, body { background: #f5f0e6; }
+    a { color: #7d2c44; }
+    a:hover { color: #ba8898; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(18px); }
@@ -44,6 +47,24 @@
       0%,100% { transform: rotate(10deg) translateY(0); }
       50%     { transform: rotate(10deg) translateY(-4px); }
     }
+    @keyframes petalFloat {
+      0%   { opacity: 1; transform: translateY(0); }
+      65%  { opacity: 0.85; transform: translateY(-14px); }
+      100% { opacity: 0; transform: translateY(-72px); }
+    }
+    @keyframes modalBackdropIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes modalCardIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes petalDot {
+      0%   { transform: scale(0); opacity: 0; }
+      55%  { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.85; }
+    }
   </style>
 </helmet>
 
@@ -51,28 +72,26 @@
 <sc-if value="{{ showOverlay }}" hint-placeholder-val="{{ true }}">
   <div style="
     position: fixed; inset: 0; z-index: 100;
-    background: #f9f3eb;
+    background: #f5f0e6;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     transition: opacity 0.8s ease;
     opacity: {{ overlayOpacity }};
   ">
-    <!-- Decorative top flourish -->
     <div style="margin-bottom: 32px; opacity: 0.35;">
       <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-        <path d="M10 20 Q30 5 60 20 Q90 35 110 20" stroke="#8a6a4a" stroke-width="1" fill="none"/>
-        <circle cx="60" cy="20" r="3" fill="#8a6a4a"/>
-        <circle cx="20" cy="16" r="2" fill="#8a6a4a"/>
-        <circle cx="100" cy="16" r="2" fill="#8a6a4a"/>
+        <path d="M10 20 Q30 5 60 20 Q90 35 110 20" stroke="#7d2c44" stroke-width="1" fill="none"/>
+        <circle cx="60" cy="20" r="3" fill="#7d2c44"/>
+        <circle cx="20" cy="16" r="2" fill="#7d2c44"/>
+        <circle cx="100" cy="16" r="2" fill="#7d2c44"/>
       </svg>
     </div>
 
-    <!-- No-name default: elegant centerpiece -->
     <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
     <div style="
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px; font-weight: 300;
-      color: #3a2a1a;
+      color: #3d3733;
       text-align: center; line-height: 1.5;
       text-transform: uppercase; letter-spacing: 5px;
       padding: 0 24px;
@@ -80,12 +99,11 @@
     ">Con todo nuestro amor</div>
     </sc-if>
 
-    <!-- Named guests -->
     <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-family: 'Cormorant Garamond', serif;
       font-size: 14px; letter-spacing: 4px; text-transform: uppercase;
-      color: #8a6a4a; font-weight: 300;
+      color: #7d2c44; font-weight: 300;
       animation: fadeIn 0.9s ease both;
       margin-bottom: 24px;
       text-align: center;
@@ -96,18 +114,18 @@
     <div style="
       font-family: 'Cormorant Garamond', serif;
       font-size: 52px; font-weight: 300; font-style: italic;
-      color: #3a2a1a;
+      color: #3d3733;
       text-align: center; line-height: 1.1;
       animation: {{ namesAnim }};
-    ">{{ guest1 }}<sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}"><br/><span style="font-size: 30px; color: #8a6a4a; letter-spacing: 8px; font-style: normal;">&amp;</span><br/>{{ guest2 }}</sc-if></div>
+    ">{{ guest1 }}<sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}"><br/><span style="font-size: 30px; color: #7d2c44; letter-spacing: 8px; font-style: normal;">&amp;</span><br/>{{ guest2 }}</sc-if></div>
     </sc-if>
 
     <div style="margin-top: 32px; opacity: 0.35;">
       <svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-        <path d="M10 20 Q30 35 60 20 Q90 5 110 20" stroke="#8a6a4a" stroke-width="1" fill="none"/>
-        <circle cx="60" cy="20" r="3" fill="#8a6a4a"/>
-        <circle cx="20" cy="24" r="2" fill="#8a6a4a"/>
-        <circle cx="100" cy="24" r="2" fill="#8a6a4a"/>
+        <path d="M10 20 Q30 35 60 20 Q90 5 110 20" stroke="#7d2c44" stroke-width="1" fill="none"/>
+        <circle cx="60" cy="20" r="3" fill="#7d2c44"/>
+        <circle cx="20" cy="24" r="2" fill="#7d2c44"/>
+        <circle cx="100" cy="24" r="2" fill="#7d2c44"/>
       </svg>
     </div>
   </div>
@@ -116,16 +134,16 @@
 <!-- Main page -->
 <div style="
   min-height: 100vh;
-  background: #f9f3eb;
+  background: #f5f0e6;
   max-width: 430px;
   margin: 0 auto;
   font-family: 'Cormorant Garamond', serif;
-  color: #3a2a1a;
+  color: #3d3733;
   opacity: {{ pageOpacity }};
   transition: opacity 0.9s ease;
 ">
 
-  <!-- Hero section: persistent intro text -->
+  <!-- Hero section -->
   <div style="
     min-height: 100vh;
     display: flex; flex-direction: column;
@@ -133,60 +151,57 @@
     padding: 60px 40px;
     text-align: center;
     position: relative;
-  ">
-    <!-- Top corner ornament -->
+  " data-screen-label="Hero">
     <div style="position: absolute; top: 24px; left: 24px; opacity: 0.25;">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8a6a4a" stroke-width="1" fill="none"/>
+        <path d="M4 44 Q4 4 44 4" stroke="#7d2c44" stroke-width="1" fill="none"/>
       </svg>
     </div>
     <div style="position: absolute; top: 24px; right: 24px; opacity: 0.25; transform: scaleX(-1);">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8a6a4a" stroke-width="1" fill="none"/>
+        <path d="M4 44 Q4 4 44 4" stroke="#7d2c44" stroke-width="1" fill="none"/>
       </svg>
     </div>
 
     <sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
       <div style="animation: fadeInStay 1.2s ease both;">
-        <!-- No-name default: text → divider -->
         <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
-          line-height: 1.8; color: #5a3e28;
+          line-height: 1.8; color: #7a3d52;
           max-width: 320px; margin: 0 auto 48px;
         ">Porque has sido parte de nuestra historia y tu cariño nos ha acompañado siempre, nos complace invitarte a nuestro enlace matrimonial</p>
 
         <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 48px;">
-          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="2.5" fill="#c4a882"/>
-            <circle cx="10" cy="3" r="1.2" fill="#c4a882"/>
-            <circle cx="10" cy="17" r="1.2" fill="#c4a882"/>
-            <circle cx="3" cy="10" r="1.2" fill="#c4a882"/>
-            <circle cx="17" cy="10" r="1.2" fill="#c4a882"/>
+            <circle cx="10" cy="10" r="2.5" fill="#c9a3ae"/>
+            <circle cx="10" cy="3" r="1.2" fill="#c9a3ae"/>
+            <circle cx="10" cy="17" r="1.2" fill="#c9a3ae"/>
+            <circle cx="3" cy="10" r="1.2" fill="#c9a3ae"/>
+            <circle cx="17" cy="10" r="1.2" fill="#c9a3ae"/>
           </svg>
-          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
         </div>
         </sc-if>
 
-        <!-- Named guests: heading → names → divider → text -->
         <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
         <div style="
           font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
-          color: #8a6a4a; font-weight: 300; margin-bottom: 28px;
+          color: #7d2c44; font-weight: 300; margin-bottom: 28px;
           line-height: 1.8;
         ">Con todo nuestro amor,<br/>invitamos a</div>
 
         <div style="
           font-size: 48px; font-weight: 300; font-style: italic;
-          line-height: 1.1; color: #3a2a1a;
+          line-height: 1.1; color: #3d3733;
           margin-bottom: 8px;
         ">{{ guest1 }}</div>
         <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}">
-        <div style="font-size: 22px; color: #b09070; letter-spacing: 8px; margin-bottom: 8px;">&amp;</div>
+        <div style="font-size: 22px; color: #ba8898; letter-spacing: 8px; margin-bottom: 8px;">&amp;</div>
         <div style="
           font-size: 48px; font-weight: 300; font-style: italic;
-          line-height: 1.1; color: #3a2a1a;
+          line-height: 1.1; color: #3d3733;
           margin-bottom: 64px;
         ">{{ guest2 }}</div>
         </sc-if>
@@ -195,46 +210,45 @@
         </sc-if>
 
         <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 64px;">
-          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="2.5" fill="#c4a882"/>
-            <circle cx="10" cy="3" r="1.2" fill="#c4a882"/>
-            <circle cx="10" cy="17" r="1.2" fill="#c4a882"/>
-            <circle cx="3" cy="10" r="1.2" fill="#c4a882"/>
-            <circle cx="17" cy="10" r="1.2" fill="#c4a882"/>
+            <circle cx="10" cy="10" r="2.5" fill="#c9a3ae"/>
+            <circle cx="10" cy="3" r="1.2" fill="#c9a3ae"/>
+            <circle cx="10" cy="17" r="1.2" fill="#c9a3ae"/>
+            <circle cx="3" cy="10" r="1.2" fill="#c9a3ae"/>
+            <circle cx="17" cy="10" r="1.2" fill="#c9a3ae"/>
           </svg>
-          <div style="height: 1px; width: 48px; background: #c4a882;"></div>
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
         </div>
 
         <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
-          line-height: 1.8; color: #5a3e28;
+          line-height: 1.8; color: #7a3d52;
           max-width: 320px; margin: 0 auto 40px;
         ">Porque han sido parte de nuestra historia y su cariño nos ha acompañado siempre, nos complace invitarlos a nuestro enlace matrimonial</p>
         </sc-if>
         <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
-          line-height: 1.8; color: #5a3e28;
+          line-height: 1.8; color: #7a3d52;
           max-width: 320px; margin: 0 auto 40px;
         ">Porque has sido parte de nuestra historia y tu cariño nos ha acompañado siempre, nos complace invitarte a nuestro enlace matrimonial</p>
         </sc-if>
         </sc-if>
 
-        <div style="font-size: 13px; letter-spacing: 4px; color: #a08060; text-transform: uppercase;">Scroll ↓</div>
+        <div style="font-size: 13px; letter-spacing: 4px; color: #9c6d7d; text-transform: uppercase;">Scroll ↓</div>
       </div>
     </sc-if>
 
-    <!-- Bottom corner ornament -->
     <div style="position: absolute; bottom: 24px; left: 24px; opacity: 0.25; transform: scaleY(-1);">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8a6a4a" stroke-width="1" fill="none"/>
+        <path d="M4 44 Q4 4 44 4" stroke="#7d2c44" stroke-width="1" fill="none"/>
       </svg>
     </div>
     <div style="position: absolute; bottom: 24px; right: 24px; opacity: 0.25; transform: scale(-1);">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8a6a4a" stroke-width="1" fill="none"/>
+        <path d="M4 44 Q4 4 44 4" stroke="#7d2c44" stroke-width="1" fill="none"/>
       </svg>
     </div>
   </div>
@@ -243,28 +257,27 @@
   <div style="
     padding: 72px 36px;
     text-align: center;
-    border-top: 1px solid #e0d0c0;
-    background: #fdf9f4;
-  ">
+    border-top: 1px solid #e3d5da;
+    background: #faf7f1;
+  " data-screen-label="La Celebracion">
     <div style="
       font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-      color: #a08060; margin-bottom: 36px;
+      color: #9c6d7d; margin-bottom: 36px;
     ">La Celebración</div>
 
-    <!-- Parents / blessing -->
     <div style="
       font-size: 13px; font-style: italic; letter-spacing: 1px;
-      color: #8a6a4a; margin-bottom: 20px;
+      color: #7d2c44; margin-bottom: 20px;
     ">Con la bendición de Dios y de nuestros padres</div>
     <div style="
       display: flex; flex-direction: column; gap: 14px;
       margin-bottom: 48px;
     ">
-      <div style="font-size: 17px; font-style: italic; color: #4a3020; font-weight: 300; line-height: 1.5;">
+      <div style="font-size: 17px; font-style: italic; color: #3d3733; font-weight: 300; line-height: 1.5;">
         Ana Lilia Valdez Del Cid<br/>Jesús María Ramírez Duarte
       </div>
-      <div style="width: 24px; height: 1px; background: #c4a882; margin: 0 auto;"></div>
-      <div style="font-size: 17px; font-style: italic; color: #4a3020; font-weight: 300; line-height: 1.5;">
+      <div style="width: 24px; height: 1px; background: #c9a3ae; margin: 0 auto;"></div>
+      <div style="font-size: 17px; font-style: italic; color: #3d3733; font-weight: 300; line-height: 1.5;">
         Alicia Boy Rivera<br/>Jorge Salcedo Correa
       </div>
     </div>
@@ -272,50 +285,49 @@
     <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
-      line-height: 1.9; color: #4a3020;
+      line-height: 1.9; color: #3d3733;
       margin-bottom: 48px;
     ">Nos encantaría que nos acompañen a celebrar nuestro amor el <strong style="font-style: normal; font-weight: 500;">viernes 19 de marzo de 2027</strong> en Hermosillo, Sonora. La ceremonia se llevará a cabo en la <em>Parroquia de Nuestra Señora del Rosario de Fátima</em> y, posteriormente, compartiremos una recepción en el <em>Jardín Santa Lucía</em>. Compartir este día con ustedes lo hará aún más especial. Esperamos contar con su presencia.</p>
     </sc-if>
     <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
-      line-height: 1.9; color: #4a3020;
+      line-height: 1.9; color: #3d3733;
       margin-bottom: 48px;
     ">Nos encantaría que nos acompañes a celebrar nuestro amor el <strong style="font-style: normal; font-weight: 500;">viernes 19 de marzo de 2027</strong> en Hermosillo, Sonora. La ceremonia se llevará a cabo en la <em>Parroquia de Nuestra Señora del Rosario de Fátima</em> y, posteriormente, compartiremos una recepción en el <em>Jardín Santa Lucía</em>. Compartir este día contigo lo hará aún más especial. Esperamos contar con tu presencia.</p>
     </sc-if>
 
-    <!-- Timeline -->
     <div style="display: flex; flex-direction: column; gap: 0; align-items: stretch; margin-bottom: 48px;">
 
       <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0;">
         <div style="
           width: 52px; height: 52px; border-radius: 50%;
-          border: 1px solid #c4a882;
+          border: 1px solid #c9a3ae;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         ">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a6a4a" stroke-width="1.2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7d2c44" stroke-width="1.2">
             <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
             <circle cx="12" cy="10" r="3"/>
           </svg>
         </div>
         <div style="text-align: left;">
-          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #a08060; margin-bottom: 4px;">Ceremonia Religiosa</div>
-          <div style="font-size: 26px; font-style: italic; color: #3a2a1a; font-weight: 300;">3:00 PM</div>
-          <div style="font-size: 13px; color: #7a5a3a; font-style: italic;">Parroquia Ntra. Sra. del Rosario de Fátima</div>
+          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 4px;">Ceremonia Religiosa</div>
+          <div style="font-size: 26px; font-style: italic; color: #3d3733; font-weight: 300;">3:00 PM</div>
+          <div style="font-size: 13px; color: #8a5568; font-style: italic;">Parroquia Ntra. Sra. del Rosario de Fátima</div>
         </div>
       </div>
 
-      <div style="width: 1px; height: 24px; background: #d8c8b4; margin-left: 26px;"></div>
+      <div style="width: 1px; height: 24px; background: #d9c3ca; margin-left: 26px;"></div>
 
       <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0;">
         <div style="
           width: 52px; height: 52px; border-radius: 50%;
-          border: 1px solid #c4a882;
+          border: 1px solid #c9a3ae;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         ">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a6a4a" stroke-width="1.2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7d2c44" stroke-width="1.2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/>
             <line x1="8" y1="2" x2="8" y2="6"/>
@@ -323,22 +335,22 @@
           </svg>
         </div>
         <div style="text-align: left;">
-          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #a08060; margin-bottom: 4px;">Ceremonia Civil</div>
-          <div style="font-size: 26px; font-style: italic; color: #3a2a1a; font-weight: 300;">8:00 PM</div>
-          <div style="font-size: 13px; color: #7a5a3a; font-style: italic;">Jardín Santa Lucía</div>
+          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 4px;">Ceremonia Civil</div>
+          <div style="font-size: 26px; font-style: italic; color: #3d3733; font-weight: 300;">8:00 PM</div>
+          <div style="font-size: 13px; color: #8a5568; font-style: italic;">Jardín Santa Lucía</div>
         </div>
       </div>
 
-      <div style="width: 1px; height: 24px; background: #d8c8b4; margin-left: 26px;"></div>
+      <div style="width: 1px; height: 24px; background: #d9c3ca; margin-left: 26px;"></div>
 
       <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0;">
         <div style="
           width: 52px; height: 52px; border-radius: 50%;
-          border: 1px solid #c4a882;
+          border: 1px solid #c9a3ae;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         ">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a6a4a" stroke-width="1.2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7d2c44" stroke-width="1.2">
             <path d="M9 18 V12 L12 3 L15 12 V18"/>
             <path d="M6 18 h12"/>
             <path d="M12 12 Q16 10 18 6"/>
@@ -346,22 +358,61 @@
           </svg>
         </div>
         <div style="text-align: left;">
-          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #a08060; margin-bottom: 4px;">Recepción</div>
-          <div style="font-size: 26px; font-style: italic; color: #3a2a1a; font-weight: 300;">9:00 PM</div>
-          <div style="font-size: 13px; color: #7a5a3a; font-style: italic;">Jardín Santa Lucía</div>
+          <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 4px;">Recepción</div>
+          <div style="font-size: 26px; font-style: italic; color: #3d3733; font-weight: 300;">9:00 PM</div>
+          <div style="font-size: 13px; color: #8a5568; font-style: italic;">Jardín Santa Lucía</div>
         </div>
       </div>
     </div>
 
-    <!-- Dress code -->
     <div style="
-      border: 1px solid #d4c0a8;
+      border: 1px solid #d9c3ca;
       border-radius: 2px;
       padding: 24px 28px;
       background: #faf5ee;
     ">
-      <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a08060; margin-bottom: 10px;">Código de vestimenta</div>
-      <div style="font-size: 28px; font-style: italic; color: #3a2a1a; font-weight: 300;">Por definir</div>
+      <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 10px;">Código de vestimenta</div>
+      <div style="font-size: 28px; font-style: italic; color: #3d3733; font-weight: 300;">Por definir</div>
+    </div>
+  </div>
+
+  <!-- Section: Save the Date -->
+  <div style="
+    position: relative;
+    min-height: 560px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    border-top: 1px solid #e3d5da;
+  " data-screen-label="Save the Date">
+    <div style="
+      position: absolute; inset: 0;
+      background-image: url('assets/pareja-dia.jpeg');
+      background-size: cover; background-position: center 30%;
+    "></div>
+    <div style="
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(58,31,42,0.5) 0%, rgba(38,20,28,0.78) 100%);
+    "></div>
+    <div style="position: relative; padding: 72px 32px;">
+      <div style="font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #e3c6d0; margin-bottom: 18px;">Save the Date</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 46px; font-style: italic; font-weight: 300; color: #f5f0e6; margin-bottom: 8px;">19 de Marzo</div>
+      <div style="font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #e3c6d0; margin-bottom: 44px;">2027 &middot; Hermosillo, Sonora</div>
+
+      <div style="display: flex; gap: 14px; justify-content: center;">
+        <div style="min-width: 78px; padding: 18px 10px; border: 1px solid rgba(245,240,230,0.4); background: rgba(58,31,42,0.28);">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-style: italic; font-weight: 300; color: #f5f0e6;">{{ countDays }}</div>
+          <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #e3c6d0; margin-top: 6px;">Días</div>
+        </div>
+        <div style="min-width: 78px; padding: 18px 10px; border: 1px solid rgba(245,240,230,0.4); background: rgba(58,31,42,0.28);">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-style: italic; font-weight: 300; color: #f5f0e6;">{{ countHours }}</div>
+          <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #e3c6d0; margin-top: 6px;">Horas</div>
+        </div>
+        <div style="min-width: 78px; padding: 18px 10px; border: 1px solid rgba(245,240,230,0.4); background: rgba(58,31,42,0.28);">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-style: italic; font-weight: 300; color: #f5f0e6;">{{ countMinutes }}</div>
+          <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #e3c6d0; margin-top: 6px;">Min</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -369,78 +420,57 @@
   <div style="
     padding: 72px 36px 40px;
     text-align: center;
-    background: #f9f3eb;
-    border-top: 1px solid #e0d0c0;
-  ">
+    background: #f5f0e6;
+    border-top: 1px solid #e3d5da;
+  " data-screen-label="Mapa Iglesia">
     <div style="
       font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-      color: #a08060; margin-bottom: 12px;
+      color: #9c6d7d; margin-bottom: 12px;
     ">Cómo llegar a la Iglesia</div>
     <div style="
-      font-size: 20px; font-style: italic; color: #3a2a1a; font-weight: 300;
+      font-size: 20px; font-style: italic; color: #3d3733; font-weight: 300;
       margin-bottom: 8px;
     ">Parroquia Ntra. Sra. del Rosario de Fátima</div>
-    <div style="font-size: 13px; color: #7a5a3a; margin-bottom: 36px; font-style: italic;">
+    <div style="font-size: 13px; color: #8a5568; margin-bottom: 36px; font-style: italic;">
       Guadalupe Victoria y Av. Zacatecas, Col. San Benito
     </div>
 
-    <!-- Hand-drawn SVG map — Iglesia -->
     <div style="
-      border: 1px solid #c8b89a;
+      border: 1px solid #d0b7bd;
       border-radius: 2px;
       overflow: hidden;
       background: #fefcf8;
       margin-bottom: 20px;
     ">
       <svg viewBox="0 0 340 280" width="100%" style="display: block;" xmlns="http://www.w3.org/2000/svg">
-        <!-- Background -->
         <rect width="340" height="280" fill="#fefcf8"/>
-
-        <!-- Grid texture (very subtle) -->
         <line x1="0" y1="70" x2="340" y2="70" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="0" y1="210" x2="340" y2="210" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="85" y1="0" x2="85" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="255" y1="0" x2="255" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
-
-        <!-- Parque de la parroquia de Fátima — green park, upper-left -->
         <rect x="8" y="22" width="126" height="70" rx="2" fill="#dbe7ce"/>
         <text x="71" y="52" font-family="Georgia, serif" font-size="7.5" fill="#6a7a54" text-anchor="middle">Parque de la</text>
         <text x="71" y="63" font-family="Georgia, serif" font-size="7.5" fill="#6a7a54" text-anchor="middle">parroquia de</text>
         <text x="71" y="74" font-family="Georgia, serif" font-size="7.5" fill="#6a7a54" text-anchor="middle">Fátima</text>
-
-        <!-- Av. Tamaulipas — horizontal road, top -->
         <rect x="0" y="14" width="340" height="13" fill="#ddd8d0"/>
         <rect x="0" y="17" width="340" height="7" fill="#e8e4dc"/>
         <text x="200" y="11" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. Tamaulipas</text>
-
-        <!-- Av. Zacatecas — horizontal road, middle -->
         <rect x="0" y="150" width="340" height="16" fill="#ddd8d0"/>
         <rect x="0" y="154" width="340" height="8" fill="#e8e4dc"/>
         <text x="14" y="146" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. Zacatecas</text>
-
-        <!-- Av. San Luis Potosí — horizontal road, bottom -->
         <rect x="0" y="252" width="340" height="13" fill="#ddd8d0"/>
         <rect x="0" y="255" width="340" height="7" fill="#e8e4dc"/>
         <text x="120" y="277" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Av. San Luis Potosí</text>
-
-        <!-- Calle Guadalupe Victoria — vertical road, by the church -->
         <rect x="184" y="0" width="14" height="280" fill="#ddd8d0"/>
         <rect x="187" y="0" width="8" height="280" fill="#e8e4dc"/>
         <text transform="translate(181, 245) rotate(-90)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Calle Guadalupe Victoria</text>
-
-        <!-- Church marker — NW corner of Guadalupe Victoria & Zacatecas -->
-        <circle cx="168" cy="118" r="10" fill="#3a2a1a"/>
-        <polygon points="168,146 160,126 176,126" fill="#3a2a1a"/>
-        <!-- Little cross inside the pin -->
+        <circle cx="168" cy="118" r="10" fill="#3d3733"/>
+        <polygon points="168,146 160,126 176,126" fill="#3d3733"/>
         <line x1="168" y1="113" x2="168" y2="123" stroke="#faf5ee" stroke-width="1.5"/>
         <line x1="164" y1="117" x2="172" y2="117" stroke="#faf5ee" stroke-width="1.5"/>
-
-        <!-- Church label -->
-        <rect x="30" y="102" width="122" height="34" rx="2" fill="#fefcf8" stroke="#c4a882" stroke-width="0.8"/>
-        <text x="91" y="116" font-family="Georgia, serif" font-size="8.5" fill="#3a2a1a" text-anchor="middle" font-style="italic">Parroquia del Rosario</text>
-        <text x="91" y="129" font-family="Georgia, serif" font-size="7" fill="#8a6a4a" text-anchor="middle">Hermosillo, Sonora</text>
-
-        <!-- Scale bar -->
+        <rect x="30" y="102" width="122" height="34" rx="2" fill="#fefcf8" stroke="#c9a3ae" stroke-width="0.8"/>
+        <text x="91" y="116" font-family="Georgia, serif" font-size="8.5" fill="#3d3733" text-anchor="middle" font-style="italic">Parroquia del Rosario</text>
+        <text x="91" y="129" font-family="Georgia, serif" font-size="7" fill="#7d2c44" text-anchor="middle">Hermosillo, Sonora</text>
         <line x1="12" y1="240" x2="62" y2="240" stroke="#8a7060" stroke-width="1.2"/>
         <line x1="12" y1="236" x2="12" y2="244" stroke="#8a7060" stroke-width="1.2"/>
         <line x1="62" y1="236" x2="62" y2="244" stroke="#8a7060" stroke-width="1.2"/>
@@ -448,12 +478,11 @@
       </svg>
     </div>
 
-    <!-- Link to church map -->
     <a href="https://maps.app.goo.gl/w2YP6eMkhF9dUTSAA" target="_blank" style="
       display: inline-block;
       padding: 14px 32px;
-      border: 1px solid #8a6a4a;
-      color: #5a3e28;
+      border: 1px solid #7d2c44;
+      color: #7a3d52;
       font-family: 'Cormorant Garamond', serif;
       font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
       text-decoration: none;
@@ -466,77 +495,53 @@
   <div style="
     padding: 40px 36px 80px;
     text-align: center;
-    background: #f9f3eb;
-  ">
+    background: #f5f0e6;
+  " data-screen-label="Mapa Jardin">
     <div style="
       font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-      color: #a08060; margin-bottom: 12px;
+      color: #9c6d7d; margin-bottom: 12px;
     ">Cómo llegar al Jardín</div>
     <div style="
-      font-size: 20px; font-style: italic; color: #3a2a1a; font-weight: 300;
+      font-size: 20px; font-style: italic; color: #3d3733; font-weight: 300;
       margin-bottom: 8px;
     ">Jardín Santa Lucía</div>
-    <div style="font-size: 13px; color: #7a5a3a; margin-bottom: 36px; font-style: italic;">
+    <div style="font-size: 13px; color: #8a5568; margin-bottom: 36px; font-style: italic;">
       Camino a La Victoria (1.5 km del Blvd. Enrique Mazón), La Victoria
     </div>
 
-    <!-- Hand-drawn SVG map -->
     <div style="
-      border: 1px solid #c8b89a;
+      border: 1px solid #d0b7bd;
       border-radius: 2px;
       overflow: hidden;
       background: #fefcf8;
       margin-bottom: 20px;
     ">
       <svg viewBox="0 0 340 280" width="100%" style="display: block;" xmlns="http://www.w3.org/2000/svg">
-        <!-- Background -->
         <rect width="340" height="280" fill="#fefcf8"/>
-
-        <!-- Grid texture (very subtle) -->
         <line x1="0" y1="70" x2="340" y2="70" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="0" y1="140" x2="340" y2="140" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="0" y1="210" x2="340" y2="210" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="85" y1="0" x2="85" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="170" y1="0" x2="170" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
         <line x1="255" y1="0" x2="255" y2="280" stroke="#ede8e0" stroke-width="0.5"/>
-
-        <!-- Blvd. Enrique Mazón López — vertical road, left side -->
         <rect x="64" y="0" width="16" height="280" fill="#ddd8d0"/>
         <rect x="68" y="0" width="8" height="280" fill="#e8e4dc"/>
-        <!-- Road label -->
         <text transform="translate(60, 240) rotate(-90)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Blvd. Enrique Mazón López</text>
-
-        <!-- Cam. A La Victoria — diagonal road (top-left to bottom-right) -->
-        <!-- The road is wide, runs diagonally -->
         <line x1="0" y1="60" x2="340" y2="200" stroke="#ddd8d0" stroke-width="16"/>
         <line x1="0" y1="60" x2="340" y2="200" stroke="#e8e4dc" stroke-width="8"/>
-        <!-- Road label -->
         <text transform="translate(60, 95) rotate(22)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Cam. A La Victoria</text>
-
-        <!-- Eucalipto — vertical road, right side -->
         <rect x="272" y="0" width="14" height="280" fill="#ddd8d0"/>
         <rect x="275" y="0" width="8" height="280" fill="#e8e4dc"/>
-        <!-- Road label -->
         <text transform="translate(268, 60) rotate(90)" font-family="Georgia, serif" font-size="8" fill="#5a4a3a" letter-spacing="1">Eucalipto</text>
-
-        <!-- C. Pagasa top right -->
         <line x1="270" y1="0" x2="340" y2="30" stroke="#e0dbd3" stroke-width="4"/>
         <text x="278" y="18" font-family="Georgia, serif" font-size="6" fill="#8a7a6a">C. Pagasa</text>
-
-        <!-- Garden marker — where Cam. A La Victoria meets Eucalipto area -->
-        <!-- Pin: teardrop shape, no outer circle -->
-        <circle cx="285" cy="163" r="10" fill="#3a2a1a"/>
-        <polygon points="285,190 277,170 293,170" fill="#3a2a1a"/>
+        <circle cx="285" cy="163" r="10" fill="#3d3733"/>
+        <polygon points="285,190 277,170 293,170" fill="#3d3733"/>
         <circle cx="285" cy="163" r="3.5" fill="#faf5ee"/>
-
-        <!-- Garden label -->
-        <rect x="188" y="198" width="130" height="34" rx="2" fill="#fefcf8" stroke="#c4a882" stroke-width="0.8"/>
-        <text x="253" y="212" font-family="Georgia, serif" font-size="8.5" fill="#3a2a1a" text-anchor="middle" font-style="italic">Jardín Santa Lucía</text>
-        <text x="253" y="225" font-family="Georgia, serif" font-size="7" fill="#8a6a4a" text-anchor="middle">Hermosillo, Sonora</text>
-        <!-- Connector line from label to pin -->
-        <line x1="285" y1="190" x2="285" y2="198" stroke="#c4a882" stroke-width="0.8" stroke-dasharray="3,2"/>
-
-        <!-- Scale bar -->
+        <rect x="188" y="198" width="130" height="34" rx="2" fill="#fefcf8" stroke="#c9a3ae" stroke-width="0.8"/>
+        <text x="253" y="212" font-family="Georgia, serif" font-size="8.5" fill="#3d3733" text-anchor="middle" font-style="italic">Jardín Santa Lucía</text>
+        <text x="253" y="225" font-family="Georgia, serif" font-size="7" fill="#7d2c44" text-anchor="middle">Hermosillo, Sonora</text>
+        <line x1="285" y1="190" x2="285" y2="198" stroke="#c9a3ae" stroke-width="0.8" stroke-dasharray="3,2"/>
         <line x1="12" y1="268" x2="62" y2="268" stroke="#8a7060" stroke-width="1.2"/>
         <line x1="12" y1="264" x2="12" y2="272" stroke="#8a7060" stroke-width="1.2"/>
         <line x1="62" y1="264" x2="62" y2="272" stroke="#8a7060" stroke-width="1.2"/>
@@ -544,12 +549,11 @@
       </svg>
     </div>
 
-    <!-- Link to garden map -->
     <a href="https://maps.app.goo.gl/QkiFcXkFrYJZHPUp7" target="_blank" style="
       display: inline-block;
       padding: 14px 32px;
-      border: 1px solid #8a6a4a;
-      color: #5a3e28;
+      border: 1px solid #7d2c44;
+      color: #7a3d52;
       font-family: 'Cormorant Garamond', serif;
       font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
       text-decoration: none;
@@ -562,23 +566,23 @@
   <div style="
     padding: 72px 36px;
     text-align: center;
-    border-top: 1px solid #e0d0c0;
-    background: #fdf9f4;
-  ">
+    border-top: 1px solid #e3d5da;
+    background: #faf7f1;
+  " data-screen-label="Padrinos">
     <div style="
       font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-      color: #a08060; margin-bottom: 12px;
+      color: #9c6d7d; margin-bottom: 12px;
     ">Padrinos</div>
     <div style="
-      font-size: 13px; font-style: italic; color: #8a6a4a; margin-bottom: 40px;
-    ">Quienes nos acompañan en este camino <span style="font-size: 10px; color: #b8a890; letter-spacing: 1px;">(por definir)</span></div>
+      font-size: 13px; font-style: italic; color: #7d2c44; margin-bottom: 40px;
+    ">Quienes nos acompañan en este camino</div>
 
     <div style="display: flex; flex-direction: column; gap: 28px;">
-      <div style="font-size: 18px; font-style: italic; color: #4a3020; font-weight: 300; line-height: 1.6;">
+      <div style="font-size: 18px; font-style: italic; color: #3d3733; font-weight: 300; line-height: 1.6;">
         Anett Ramírez Valdez<br/>Daniel Edgardo López Castañeda
       </div>
-      <div style="width: 24px; height: 1px; background: #c4a882; margin: 0 auto;"></div>
-      <div style="font-size: 18px; font-style: italic; color: #4a3020; font-weight: 300; line-height: 1.6;">
+      <div style="width: 24px; height: 1px; background: #c9a3ae; margin: 0 auto;"></div>
+      <div style="font-size: 18px; font-style: italic; color: #3d3733; font-weight: 300; line-height: 1.6;">
         Aurora Robles<br/>Jesús Federico Monge Robles
       </div>
     </div>
@@ -588,55 +592,143 @@
   <div style="
     padding: 72px 36px;
     text-align: center;
-    border-top: 1px solid #e0d0c0;
-    background: #f9f3eb;
-  ">
+    border-top: 1px solid #e3d5da;
+    background: #f5f0e6;
+  " data-screen-label="Presente">
     <div style="
       font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-      color: #a08060; margin-bottom: 28px;
+      color: #9c6d7d; margin-bottom: 28px;
     ">Presente</div>
 
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
-      line-height: 1.9; color: #4a3020;
+      line-height: 1.9; color: #3d3733;
       max-width: 340px; margin: 0 auto 40px;
-    ">Para nosotros lo más importante es que nos acompañes, sin embargo, si deseas brindarnos un obsequio, agradecemos que sea en efectivo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a6a4a" stroke-width="1.2" style="display: inline-block; vertical-align: -3px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6 L12 13 L22 6"/></svg></p>
+    ">Para nosotros tu presencia es el mejor regalo, sin embargo, si aún así deseas brindarnos un obsequio, te agradeceríamos que fuera en efectivo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7d2c44" stroke-width="1.2" style="display: inline-block; vertical-align: -3px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6 L12 13 L22 6"/></svg></p>
 
-    <!-- ó -->
-    <div style="font-size: 20px; font-style: italic; color: #a08060; margin-bottom: 20px;">ó</div>
+    <div style="font-size: 20px; font-style: italic; color: #9c6d7d; margin-bottom: 20px;">ó</div>
 
-    <!-- Mesa de regalos -->
     <div style="
-      border: 1px solid #d4c0a8;
+      border: 1px solid #d9c3ca;
       border-radius: 2px;
       padding: 20px 28px;
       background: #faf5ee;
     ">
-      <div style="font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #8a6a4a;">Mesa de Regalos</div>
+      <div style="font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #7d2c44;">Mesa de Regalos</div>
     </div>
-    <div style="font-size: 11px; font-style: italic; color: #b8a890; margin-top: 12px;">(QR o enlace por confirmar)</div>
+    <div style="font-size: 11px; font-style: italic; color: #b09aa0; margin-top: 12px;">(QR o enlace por confirmar)</div>
+  </div>
+
+  <!-- Section: Confirmar Asistencia -->
+  <div style="
+    position: relative;
+    min-height: 520px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  " data-screen-label="Confirmar Asistencia">
+    <div style="
+      position: absolute; inset: 0;
+      background-image: url('assets/pareja-noche.jpeg');
+      background-size: cover; background-position: center 30%;
+    "></div>
+    <div style="
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(15,8,12,0.5) 0%, rgba(15,8,12,0.8) 100%);
+    "></div>
+    <div style="position: relative; padding: 72px 32px;">
+      <div style="font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #e3c6d0; margin-bottom: 24px;">Confirmación</div>
+      <div style="
+        font-size: 19px; font-style: italic; font-weight: 300;
+        color: #f5f0e6; line-height: 1.8; max-width: 300px; margin: 0 auto 44px;
+      ">Tu presencia es lo más importante. Por lo que te agradeceríamos confirmar tu asistencia para esta ocasión tan especial.</div>
+      <button onClick="{{ openModal }}" style="
+        padding: 16px 44px; border: 1px solid #f5f0e6; background: transparent; color: #f5f0e6;
+        font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+        cursor: pointer;
+      ">Confirmar Asistencia</button>
+    </div>
   </div>
 
   <!-- Footer -->
   <div style="
     padding: 48px 36px;
     text-align: center;
-    background: #3a2a1a;
-    color: #c4a882;
+    background: #3a1f2a;
+    color: #c9a3ae;
   ">
-    <div style="font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 5px; text-transform: uppercase; color: #7a6050; margin-bottom: 16px; font-weight: 300;">
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 5px; text-transform: uppercase; color: #b98fa0; margin-bottom: 16px; font-weight: 300;">
       Con amor
     </div>
-    <div style="font-size: 22px; font-weight: 300; text-transform: uppercase; letter-spacing: 4px; color: #e8d8c4; line-height: 1.2; margin-bottom: 24px;">
-      Jessica <span style="font-size: 15px; color: #8a6a4a; letter-spacing: 2px;">&amp;</span> Ricardo
+    <div style="font-size: 22px; font-weight: 300; text-transform: uppercase; letter-spacing: 4px; color: #f0dde3; line-height: 1.2; margin-bottom: 24px;">
+      Jessica <span style="font-size: 15px; color: #7d2c44; letter-spacing: 2px;">&amp;</span> Ricardo
     </div>
     <div style="
       font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-      color: #7a6050;
+      color: #b98fa0;
     ">19 · Marzo · 2027</div>
   </div>
 
 </div>
+
+<!-- Confirmation modal -->
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeModal }}" style="
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(30,15,20,0.62);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  animation: modalBackdropIn 1.2s ease both;
+">
+  <div onClick="{{ stopProp }}" style="
+    background: #faf7f1; border: 1px solid #c9a3ae;
+    max-width: 360px; width: 100%; padding: 52px 32px 40px;
+    text-align: center; position: relative;
+    animation: modalCardIn 1.2s cubic-bezier(0.2,0.8,0.3,1) both;
+  ">
+    <button onClick="{{ closeModal }}" style="
+      position: absolute; top: 16px; right: 18px; background: none; border: none;
+      font-size: 22px; color: #9c6d7d; cursor: pointer; line-height: 1;
+    ">&times;</button>
+    <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 28px;">Confirmación de Asistencia</div>
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733;">Jesús</div>
+    <div style="font-size: 20px; color: #ba8898; letter-spacing: 6px; margin: 6px 0;">&amp;</div>
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">Aurora</div>
+    <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar contigo. Por favor confirma tu asistencia.</p>
+    <button onClick="{{ confirmAttendance }}" style="
+      width: 100%; padding: 16px; border: 1px solid #7d2c44; background: #7d2c44; color: #f5f0e6;
+      font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+      cursor: pointer;
+    "><sc-if value="{{ confirmed }}" hint-placeholder-val="{{ false }}">¡Gracias por confirmar!</sc-if><sc-if value="{{ notConfirmed }}" hint-placeholder-val="{{ true }}">Confirmar Asistencia</sc-if></button>
+  </div>
+</div>
+</sc-if>
+
+<!-- Floating petals, spawned on scroll -->
+<div style="position: fixed; inset: 0; z-index: 3; overflow: hidden; pointer-events: none;">
+  <sc-for list="{{ petals }}" as="p" hint-placeholder-count="0">
+    <div style="{{ p.style }}">
+      <svg width="{{ p.size }}" height="{{ p.size }}" viewBox="0 0 20 20" fill="none">
+        <g style="transform-origin: 10px 10px; animation: petalDot 0.5s ease-out both;">
+          <circle cx="10" cy="10" r="2.5" fill="{{ p.color }}"/>
+        </g>
+        <g style="transform-origin: 10px 3px; animation: petalDot 0.5s ease-out 0.12s both;">
+          <circle cx="10" cy="3" r="1.6" fill="{{ p.color }}"/>
+        </g>
+        <g style="transform-origin: 10px 17px; animation: petalDot 0.5s ease-out 0.2s both;">
+          <circle cx="10" cy="17" r="1.6" fill="{{ p.color }}"/>
+        </g>
+        <g style="transform-origin: 3px 10px; animation: petalDot 0.5s ease-out 0.28s both;">
+          <circle cx="3" cy="10" r="1.6" fill="{{ p.color }}"/>
+        </g>
+        <g style="transform-origin: 17px 10px; animation: petalDot 0.5s ease-out 0.36s both;">
+          <circle cx="17" cy="10" r="1.6" fill="{{ p.color }}"/>
+        </g>
+      </svg>
+    </div>
+  </sc-for>
+</div>
+
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
@@ -644,14 +736,40 @@ class Component extends DCLogic {
     phase: 0,
     guest1: '',
     guest2: '',
+    now: Date.now(),
+    modalOpen: false,
+    confirmed: false,
+    petals: [],
+  };
+
+  weddingTarget = new Date('2027-03-19T15:00:00').getTime();
+  petalColors = ['#c9a3ae', '#ba8898', '#93a17f', '#d9c3ca'];
+  petalId = 0;
+  lastPetalSpawn = 0;
+
+  spawnPetal = () => {
+    const t = Date.now();
+    if (t - this.lastPetalSpawn < 260) return;
+    this.lastPetalSpawn = t;
+    const id = ++this.petalId;
+    const left = (5 + Math.random() * 90).toFixed(1);
+    const top = (5 + Math.random() * 85).toFixed(1);
+    const size = Math.round(14 + Math.random() * 14);
+    const duration = (4 + Math.random() * 2.5).toFixed(1);
+    const color = this.petalColors[Math.floor(Math.random() * this.petalColors.length)];
+    const style = `position:absolute; left:${left}vw; top:${top}vh; opacity:0; animation: petalFloat ${duration}s ease-out forwards;`;
+    this.setState(s => ({ petals: [...s.petals, { id, style, size, color }].slice(-14) }));
+    setTimeout(() => {
+      this.setState(s => ({ petals: s.petals.filter(p => p.id !== id) }));
+    }, duration * 1000 + 200);
   };
 
   componentDidMount() {
-    // Force top and block scroll during intro animation
+    this._tick = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    window.addEventListener('scroll', this.spawnPetal, { passive: true });
     window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
 
-    // Read encoded names from URL param ?i=base64(g1|g2)
     const params = new URLSearchParams(window.location.search);
     let g1 = '', g2 = '';
     const encoded = params.get('i');
@@ -665,25 +783,32 @@ class Component extends DCLogic {
     }
     this.setState({ guest1: g1, guest2: g2 });
 
-    // Phase 1: after 3s start fading names
     setTimeout(() => {
       this.setState({ phase: 1 });
     }, 3000);
 
-    // Phase 2: after 3.8s hide overlay, show main page
     setTimeout(() => {
       window.scrollTo(0, 0);
       this.setState({ phase: 2 });
     }, 3800);
 
-    // Unlock scroll 2s after main page appears
     setTimeout(() => {
       document.body.style.overflow = '';
     }, 5300);
   }
 
+  componentWillUnmount() {
+    clearInterval(this._tick);
+    window.removeEventListener('scroll', this.spawnPetal);
+  }
+
   renderVals() {
-    const { phase, guest1, guest2 } = this.state;
+    const { phase, guest1, guest2, now, modalOpen, confirmed, petals } = this.state;
+    const diff = Math.max(0, this.weddingTarget - now);
+    const pad = n => String(n).padStart(2, '0');
+    const countDays = Math.floor(diff / 86400000);
+    const countHours = pad(Math.floor((diff % 86400000) / 3600000));
+    const countMinutes = pad(Math.floor((diff % 3600000) / 60000));
     return {
       guest1,
       guest2,
@@ -699,9 +824,21 @@ class Component extends DCLogic {
         : 'fadeOut 0.8s ease both',
       pageOpacity: phase === 2 ? 1 : 0,
       showHero: phase === 2,
+      countDays,
+      countHours,
+      countMinutes,
+      modalOpen,
+      confirmed,
+      notConfirmed: !confirmed,
+      petals,
+      openModal: () => this.setState({ modalOpen: true, confirmed: false }),
+      closeModal: () => this.setState({ modalOpen: false }),
+      stopProp: e => e.stopPropagation(),
+      confirmAttendance: () => this.setState({ confirmed: true }),
     };
   }
 }
+
 </script>
 </body>
 </html>
