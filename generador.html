@@ -72,8 +72,8 @@
   <p class="hint">Cambia esto por tu dominio cuando subas el sitio.</p>
 
   <label>Invitados (un par por línea, separados por coma)</label>
-  <textarea id="guests" placeholder="Jesús, Ana&#10;Carlos, María&#10;Roberto, Laura&#10;FAM:Familia Duarte:5"></textarea>
-  <p class="hint">Formato: Nombre1, Nombre2 — o solo un nombre si es invitado individual.<br/>Para familia: FAM:Nombre de la familia:número de invitaciones (ej. FAM:Familia Duarte:5)</p>
+  <textarea id="guests" placeholder="Jesús, Ana&#10;Carlos, María&#10;Roberto, Laura&#10;Roberto:2&#10;FAM:Familia Duarte:5"></textarea>
+  <p class="hint">Formato: Nombre1, Nombre2 — o solo un nombre si es invitado individual.<br/>Para permitir un +1: Nombre:2 (ej. Roberto:2)<br/>Para familia: FAM:Nombre de la familia:número de invitaciones (ej. FAM:Familia Duarte:5)</p>
 
   <button onclick="generar()">Generar Invitación</button>
 </div>
@@ -82,8 +82,8 @@
 <div class="results" id="results"></div>
 
 <script>
-function encodeGuests(g1, g2) {
-  return btoa(unescape(encodeURIComponent(g1 + '|' + g2)));
+function encodeGuests(g1, g2, allowPlusOne) {
+  return btoa(unescape(encodeURIComponent(g1 + '|' + g2 + (allowPlusOne ? '|2' : ''))));
 }
 
 function encodeFamily(name, count) {
@@ -118,10 +118,18 @@ function generar() {
       nameLabel = famName + ' (' + famCount + ' invitaciones)';
     } else {
       const parts = trimmed.split(',').map(function(s) { return s.trim(); });
-      const g1 = parts[0] || '';
+      let g1 = parts[0] || '';
       const g2 = parts[1] || '';
-      encoded = encodeGuests(g1, g2);
-      nameLabel = g2 ? g1 + ' & ' + g2 : g1;
+      let allowPlusOne = false;
+      if (!g2) {
+        const plusOneMatch = g1.match(/^(.*?):2$/);
+        if (plusOneMatch) {
+          g1 = plusOneMatch[1].trim();
+          allowPlusOne = true;
+        }
+      }
+      encoded = encodeGuests(g1, g2, allowPlusOne);
+      nameLabel = g2 ? g1 + ' & ' + g2 : g1 + (allowPlusOne ? ' (+1 permitido)' : '');
     }
 
     const url = baseUrl + '?i=' + encoded;

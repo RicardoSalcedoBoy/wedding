@@ -740,11 +740,12 @@
     </sc-if>
     <sc-if value="{{ isFamily }}" hint-placeholder-val="{{ false }}">
     <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar con ustedes. Por favor confirma tu asistencia.</p>
-
-    <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 16px; text-align: center;">Número de asistentes</div>
+    </sc-if>
+    <sc-if value="{{ needsSelection }}" hint-placeholder-val="{{ false }}">
+    <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 16px; text-align: center;">{{ attendeeQuestion }}</div>
     <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
       <sc-for list="{{ attendeeOptions }}" as="opt" hint-placeholder-count="0">
-      <button onClick="{{ opt.select }}" style="{{ opt.style }}">{{ opt.n }}</button>
+      <button onClick="{{ opt.select }}" style="{{ opt.style }}">{{ opt.label }}</button>
       </sc-for>
     </div>
     </sc-if>
@@ -788,6 +789,7 @@ class Component extends DCLogic {
     isFamily: false,
     familyName: '',
     maxAttendees: 0,
+    allowPlusOne: false,
     selectedAttendees: null,
     now: Date.now(),
     modalOpen: false,
@@ -824,7 +826,7 @@ class Component extends DCLogic {
     document.body.style.overflow = 'hidden';
 
     const params = new URLSearchParams(window.location.search);
-    let g1 = '', g2 = '', isFamily = false, familyName = '', maxAttendees = 0;
+    let g1 = '', g2 = '', isFamily = false, familyName = '', maxAttendees = 0, allowPlusOne = false;
     const encoded = params.get('i');
     if (encoded) {
       try {
@@ -837,10 +839,11 @@ class Component extends DCLogic {
         } else {
           if (parts[0]) g1 = parts[0];
           if (parts[1]) g2 = parts[1];
+          if (parseInt(parts[2], 10) === 2) allowPlusOne = true;
         }
       } catch (e) {}
     }
-    this.setState({ guest1: g1, guest2: g2, isFamily, familyName, maxAttendees });
+    this.setState({ guest1: g1, guest2: g2, isFamily, familyName, maxAttendees, allowPlusOne });
 
     setTimeout(() => {
       this.setState({ phase: 1 });
@@ -862,7 +865,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, selectedAttendees, now, modalOpen, confirmed, petals } = this.state;
+    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, selectedAttendees, now, modalOpen, confirmed, petals } = this.state;
     const diff = Math.max(0, this.weddingTarget - now);
     const pad = n => String(n).padStart(2, '0');
     const countDays = Math.floor(diff / 86400000);
@@ -872,22 +875,27 @@ class Component extends DCLogic {
     const hasGuest2 = !!guest2;
     const isPlural = hasGuest2 || isFamily;
     const isSingular = !isPlural;
-    const confirmDisabled = isFamily && !selectedAttendees;
+    const singleGuest = !!guest1 && !guest2;
+    const showPlusOne = singleGuest && allowPlusOne && !isFamily;
+    const needsSelection = isFamily || showPlusOne;
+    const confirmDisabled = needsSelection && !selectedAttendees;
+    const attendeeQuestion = isFamily ? 'Número de asistentes' : (showPlusOne ? '¿Deseas que alguien te acompañe?' : '');
 
     const btnBase = 'min-width:44px; padding:10px 0; border:1px solid #7d2c44; font-family:\'Cormorant Garamond\', serif; font-size:15px; cursor:pointer; background:transparent; color:#7d2c44;';
     const btnSelected = 'background:#7d2c44; color:#f5f0e6;';
-    const attendeeOptions = isFamily
-      ? Array.from({ length: maxAttendees }, (_, idx) => {
-          const n = idx + 1;
-          const selected = selectedAttendees === n;
-          return {
-            n,
-            selected,
-            style: btnBase + (selected ? btnSelected : ''),
-            select: () => this.setState({ selectedAttendees: n }),
-          };
-        })
-      : [];
+    const optionCount = isFamily ? maxAttendees : (showPlusOne ? 2 : 0);
+    const attendeeOptions = Array.from({ length: optionCount }, (_, idx) => {
+      const n = idx + 1;
+      const selected = selectedAttendees === n;
+      const label = isFamily ? String(n) : (n === 1 ? 'No' : 'Sí');
+      return {
+        n,
+        label,
+        selected,
+        style: btnBase + (selected ? btnSelected : ''),
+        select: () => this.setState({ selectedAttendees: n }),
+      };
+    });
 
     return {
       guest1,
@@ -897,7 +905,10 @@ class Component extends DCLogic {
       hasName: !!guest1,
       noGuest: !guest1 && !isFamily,
       hasGuest2,
-      singleGuest: !!guest1 && !guest2,
+      singleGuest,
+      showPlusOne,
+      needsSelection,
+      attendeeQuestion,
       isPlural,
       isSingular,
       showOverlay: phase < 2,
@@ -924,7 +935,7 @@ class Component extends DCLogic {
       closeModal: () => this.setState({ modalOpen: false }),
       stopProp: e => e.stopPropagation(),
       confirmAttendance: () => {
-        if (isFamily && !selectedAttendees) return;
+        if (needsSelection && !selectedAttendees) return;
         this.setState({ confirmed: true });
       },
     };
