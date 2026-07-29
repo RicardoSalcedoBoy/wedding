@@ -169,12 +169,12 @@
           line-height: 1.8;
         ">Invitamos a</div>
 
+        <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}">
         <div style="
           font-size: 48px; font-weight: 300; font-style: italic;
           line-height: 1.1; color: #3d3733;
           margin-bottom: 8px;
         ">{{ guest1 }}</div>
-        <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}">
         <div style="font-size: 22px; color: #ba8898; letter-spacing: 8px; margin-bottom: 8px;">&amp;</div>
         <div style="
           font-size: 48px; font-weight: 300; font-style: italic;
@@ -183,7 +183,11 @@
         ">{{ guest2 }}</div>
         </sc-if>
         <sc-if value="{{ singleGuest }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-bottom: 64px;"></div>
+        <div style="
+          font-size: 48px; font-weight: 300; font-style: italic;
+          line-height: 1.1; color: #3d3733;
+          margin-bottom: 64px;
+        ">{{ guest1 }}</div>
         </sc-if>
 
         <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 64px;">
