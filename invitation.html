@@ -162,6 +162,38 @@
         </div>
         </sc-if>
 
+        <sc-if value="{{ isFamily }}" hint-placeholder-val="{{ false }}">
+        <div style="
+          font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
+          color: #7d2c44; font-weight: 300; margin-bottom: 44px;
+          line-height: 1.8;
+        ">Invitamos a</div>
+
+        <div style="
+          font-size: 48px; font-weight: 300; font-style: italic;
+          line-height: 1.1; color: #3d3733;
+          margin-bottom: 44px;
+        ">{{ familyName }}</div>
+
+        <div style="display: flex; align-items: center; gap: 16px; justify-content: center; margin-bottom: 64px;">
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="2.5" fill="#c9a3ae"/>
+            <circle cx="10" cy="3" r="1.2" fill="#c9a3ae"/>
+            <circle cx="10" cy="17" r="1.2" fill="#c9a3ae"/>
+            <circle cx="3" cy="10" r="1.2" fill="#c9a3ae"/>
+            <circle cx="17" cy="10" r="1.2" fill="#c9a3ae"/>
+          </svg>
+          <div style="height: 1px; width: 48px; background: #c9a3ae;"></div>
+        </div>
+
+        <p style="
+          font-size: 19px; font-weight: 300; font-style: italic;
+          line-height: 1.8; color: #7a3d52;
+          max-width: 320px; margin: 0 auto 40px;
+        ">Porque han sido parte de nuestra historia y su cariño es especial para nosotros, nos complace invitarlos a nuestro enlace matrimonial</p>
+        </sc-if>
+
         <sc-if value="{{ hasName }}" hint-placeholder-val="{{ true }}">
         <div style="
           font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
@@ -263,14 +295,14 @@
       </div>
     </div>
 
-    <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isPlural }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #3d3733;
       margin-bottom: 48px;
     ">Nos encantaría que nos acompañen a celebrar nuestro amor el <strong style="font-style: normal; font-weight: 500;">viernes 19 de marzo de 2027</strong> en Hermosillo, Sonora. La ceremonia se llevará a cabo en la <em>Parroquia de Nuestra Señora del Rosario de Fátima</em> y, posteriormente, compartiremos una recepción en el <em>Jardín Santa Lucía</em>. Compartir este día con ustedes lo hará aún más especial. Esperamos contar con su presencia.</p>
     </sc-if>
-    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isSingular }}" hint-placeholder-val="{{ false }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #3d3733;
@@ -581,14 +613,14 @@
       color: #9c6d7d; margin-bottom: 28px;
     ">Presente</div>
 
-    <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ isPlural }}" hint-placeholder-val="{{ false }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #3d3733;
       max-width: 340px; margin: 0 auto 40px;
     ">Para nosotros su presencia es el mejor regalo, sin embargo, si aún así desean brindarnos un obsequio, agradeceríamos que fuera en efectivo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7d2c44" stroke-width="1.2" style="display: inline-block; vertical-align: -3px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6 L12 13 L22 6"/></svg></p>
     </sc-if>
-    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isSingular }}" hint-placeholder-val="{{ true }}">
     <p style="
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #3d3733;
@@ -628,13 +660,13 @@
     "></div>
     <div style="position: relative; padding: 72px 32px;">
       <div style="font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #e3c6d0; margin-bottom: 24px;">Confirmación</div>
-      <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ isPlural }}" hint-placeholder-val="{{ false }}">
       <div style="
         font-size: 19px; font-style: italic; font-weight: 300;
         color: #f5f0e6; line-height: 1.8; max-width: 300px; margin: 0 auto 44px;
       ">Su presencia es lo más importante. Por lo que les agradeceríamos confirmar su asistencia para esta ocasión tan especial.</div>
       </sc-if>
-      <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ isSingular }}" hint-placeholder-val="{{ true }}">
       <div style="
         font-size: 19px; font-style: italic; font-weight: 300;
         color: #f5f0e6; line-height: 1.8; max-width: 300px; margin: 0 auto 44px;
@@ -694,20 +726,29 @@
     <div style="font-size: 20px; color: #ba8898; letter-spacing: 6px; margin: 6px 0;">&amp;</div>
     <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">{{ guest2 }}</div>
     </sc-if>
-    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isSingular }}" hint-placeholder-val="{{ true }}">
     <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">{{ guest1 }}</div>
+    </sc-if>
+    <sc-if value="{{ isFamily }}" hint-placeholder-val="{{ false }}">
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">{{ familyName }}</div>
     </sc-if>
     <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
     <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar con ustedes. Por favor confirmen su asistencia.</p>
     </sc-if>
-    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isSingular }}" hint-placeholder-val="{{ true }}">
     <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar contigo. Por favor confirma tu asistencia.</p>
     </sc-if>
-    <button onClick="{{ confirmAttendance }}" style="
-      width: 100%; padding: 16px; border: 1px solid #7d2c44; background: #7d2c44; color: #f5f0e6;
-      font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
-      cursor: pointer;
-    "><sc-if value="{{ confirmed }}" hint-placeholder-val="{{ false }}">¡Gracias por confirmar!</sc-if><sc-if value="{{ notConfirmed }}" hint-placeholder-val="{{ true }}">Confirmar Asistencia</sc-if></button>
+    <sc-if value="{{ isFamily }}" hint-placeholder-val="{{ false }}">
+    <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar con ustedes. Por favor confirma tu asistencia.</p>
+
+    <div style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 16px; text-align: center;">Número de asistentes</div>
+    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
+      <sc-for list="{{ attendeeOptions }}" as="opt" hint-placeholder-count="0">
+      <button onClick="{{ opt.select }}" style="{{ opt.style }}">{{ opt.n }}</button>
+      </sc-for>
+    </div>
+    </sc-if>
+    <button onClick="{{ confirmAttendance }}" disabled="{{ confirmDisabled }}" style="{{ confirmButtonStyle }}"><sc-if value="{{ confirmed }}" hint-placeholder-val="{{ false }}">¡Gracias por confirmar!</sc-if><sc-if value="{{ notConfirmed }}" hint-placeholder-val="{{ true }}">Confirmar Asistencia</sc-if></button>
   </div>
 </div>
 </sc-if>
@@ -744,6 +785,10 @@ class Component extends DCLogic {
     phase: 0,
     guest1: '',
     guest2: '',
+    isFamily: false,
+    familyName: '',
+    maxAttendees: 0,
+    selectedAttendees: null,
     now: Date.now(),
     modalOpen: false,
     confirmed: false,
@@ -779,17 +824,23 @@ class Component extends DCLogic {
     document.body.style.overflow = 'hidden';
 
     const params = new URLSearchParams(window.location.search);
-    let g1 = '', g2 = '';
+    let g1 = '', g2 = '', isFamily = false, familyName = '', maxAttendees = 0;
     const encoded = params.get('i');
     if (encoded) {
       try {
         const decoded = decodeURIComponent(escape(atob(encoded)));
         const parts = decoded.split('|');
-        if (parts[0]) g1 = parts[0];
-        if (parts[1]) g2 = parts[1];
+        if (parts[0] === 'FAM') {
+          isFamily = true;
+          familyName = parts[1] || '';
+          maxAttendees = parseInt(parts[2], 10) || 0;
+        } else {
+          if (parts[0]) g1 = parts[0];
+          if (parts[1]) g2 = parts[1];
+        }
       } catch (e) {}
     }
-    this.setState({ guest1: g1, guest2: g2 });
+    this.setState({ guest1: g1, guest2: g2, isFamily, familyName, maxAttendees });
 
     setTimeout(() => {
       this.setState({ phase: 1 });
@@ -811,20 +862,44 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { phase, guest1, guest2, now, modalOpen, confirmed, petals } = this.state;
+    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, selectedAttendees, now, modalOpen, confirmed, petals } = this.state;
     const diff = Math.max(0, this.weddingTarget - now);
     const pad = n => String(n).padStart(2, '0');
     const countDays = Math.floor(diff / 86400000);
     const countHours = pad(Math.floor((diff % 86400000) / 3600000));
     const countMinutes = pad(Math.floor((diff % 3600000) / 60000));
+
+    const hasGuest2 = !!guest2;
+    const isPlural = hasGuest2 || isFamily;
+    const isSingular = !isPlural;
+    const confirmDisabled = isFamily && !selectedAttendees;
+
+    const btnBase = 'min-width:44px; padding:10px 0; border:1px solid #7d2c44; font-family:\'Cormorant Garamond\', serif; font-size:15px; cursor:pointer; background:transparent; color:#7d2c44;';
+    const btnSelected = 'background:#7d2c44; color:#f5f0e6;';
+    const attendeeOptions = isFamily
+      ? Array.from({ length: maxAttendees }, (_, idx) => {
+          const n = idx + 1;
+          const selected = selectedAttendees === n;
+          return {
+            n,
+            selected,
+            style: btnBase + (selected ? btnSelected : ''),
+            select: () => this.setState({ selectedAttendees: n }),
+          };
+        })
+      : [];
+
     return {
       guest1,
       guest2,
+      isFamily,
+      familyName,
       hasName: !!guest1,
-      noGuest: !guest1,
-      hasGuest2: !!guest2,
+      noGuest: !guest1 && !isFamily,
+      hasGuest2,
       singleGuest: !!guest1 && !guest2,
-      notPair: !guest2,
+      isPlural,
+      isSingular,
       showOverlay: phase < 2,
       overlayOpacity: phase === 1 ? 0 : 1,
       namesAnim: phase === 0
@@ -839,10 +914,19 @@ class Component extends DCLogic {
       confirmed,
       notConfirmed: !confirmed,
       petals,
-      openModal: () => this.setState({ modalOpen: true, confirmed: false }),
+      attendeeOptions,
+      confirmDisabled,
+      confirmButtonStyle: 'width: 100%; padding: 16px; border: 1px solid #7d2c44; background: '
+        + (confirmDisabled ? '#c9a3ae' : '#7d2c44')
+        + '; color: #f5f0e6; font-family: \'Cormorant Garamond\', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; cursor: '
+        + (confirmDisabled ? 'not-allowed' : 'pointer') + ';',
+      openModal: () => this.setState({ modalOpen: true, confirmed: false, selectedAttendees: null }),
       closeModal: () => this.setState({ modalOpen: false }),
       stopProp: e => e.stopPropagation(),
-      confirmAttendance: () => this.setState({ confirmed: true }),
+      confirmAttendance: () => {
+        if (isFamily && !selectedAttendees) return;
+        this.setState({ confirmed: true });
+      },
     };
   }
 }
