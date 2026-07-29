@@ -887,7 +887,7 @@ class Component extends DCLogic {
     const attendeeOptions = Array.from({ length: optionCount }, (_, idx) => {
       const n = idx + 1;
       const selected = selectedAttendees === n;
-      const label = isFamily ? String(n) : (n === 1 ? 'No' : 'Sí');
+      const label = isFamily ? String(n) : (n === 1 ? 'Sí' : 'No');
       return {
         n,
         label,
