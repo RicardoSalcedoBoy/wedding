@@ -689,10 +689,20 @@
       font-size: 22px; color: #9c6d7d; cursor: pointer; line-height: 1;
     ">&times;</button>
     <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #9c6d7d; margin-bottom: 28px;">Confirmación de Asistencia</div>
-    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733;">Jesús</div>
+    <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733;">{{ guest1 }}</div>
     <div style="font-size: 20px; color: #ba8898; letter-spacing: 6px; margin: 6px 0;">&amp;</div>
-    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">Aurora</div>
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">{{ guest2 }}</div>
+    </sc-if>
+    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-style: italic; font-weight: 300; color: #3d3733; margin-bottom: 32px;">{{ guest1 }}</div>
+    </sc-if>
+    <sc-if value="{{ hasGuest2 }}" hint-placeholder-val="{{ false }}">
+    <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar con ustedes. Por favor confirmen su asistencia.</p>
+    </sc-if>
+    <sc-if value="{{ notPair }}" hint-placeholder-val="{{ true }}">
     <p style="font-size: 15px; font-style: italic; color: #7a3d52; line-height: 1.7; margin-bottom: 32px;">Nos encantaría contar contigo. Por favor confirma tu asistencia.</p>
+    </sc-if>
     <button onClick="{{ confirmAttendance }}" style="
       width: 100%; padding: 16px; border: 1px solid #7d2c44; background: #7d2c44; color: #f5f0e6;
       font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
