@@ -72,8 +72,8 @@
   <p class="hint">Cambia esto por tu dominio cuando subas el sitio.</p>
 
   <label>Invitados (un par por línea, separados por coma)</label>
-  <textarea id="guests" placeholder="Jesús, Ana&#10;Carlos, María&#10;Roberto, Laura&#10;Roberto:2&#10;FAM:Familia Duarte:5"></textarea>
-  <p class="hint">Formato: Nombre1, Nombre2 — o solo un nombre si es invitado individual.<br/>Para permitir un +1: Nombre:2 (ej. Roberto:2)<br/>Para familia: FAM:Nombre de la familia:número de invitaciones (ej. FAM:Familia Duarte:5)</p>
+  <textarea id="guests" placeholder="Pedro:1:Ramirez001&#10;Roberto:2:Diaz002&#10;Carlos, María:Victoria235&#10;FAM:Familia Duarte:5:Perez1512"></textarea>
+  <p class="hint">Cada invitado siempre lleva un ID al final (identifica quién confirmó, no se ve en la página):<br/>• Individual sin +1: Nombre:1:ID (ej. Pedro:1:Ramirez001)<br/>• Individual con +1: Nombre:2:ID (ej. Roberto:2:Ramirez001)<br/>• Pareja: Nombre1, Nombre2:ID (ej. Carlos, María:Victoria235)<br/>• Familia: FAM:Nombre de la familia:número de invitaciones:ID (ej. FAM:Familia Duarte:5:Perez1512)</p>
 
   <button onclick="generar()">Generar Invitación</button>
 </div>
@@ -82,12 +82,12 @@
 <div class="results" id="results"></div>
 
 <script>
-function encodeGuests(g1, g2, allowPlusOne) {
-  return btoa(unescape(encodeURIComponent(g1 + '|' + g2 + (allowPlusOne ? '|2' : ''))));
+function encodeGuests(g1, g2, allowPlusOne, id) {
+  return btoa(unescape(encodeURIComponent(g1 + '|' + g2 + '|' + (allowPlusOne ? '2' : '') + '|' + (id || ''))));
 }
 
-function encodeFamily(name, count) {
-  return btoa(unescape(encodeURIComponent('FAM|' + name + '|' + count)));
+function encodeFamily(name, count, id) {
+  return btoa(unescape(encodeURIComponent('FAM|' + name + '|' + count + '|' + (id || ''))));
 }
 
 function qrUrl(data, size) {
@@ -114,22 +114,35 @@ function generar() {
       const famParts = trimmed.slice(4).split(':').map(function(s) { return s.trim(); });
       const famName = famParts[0] || '';
       const famCount = famParts[1] || '1';
-      encoded = encodeFamily(famName, famCount);
-      nameLabel = famName + ' (' + famCount + ' invitaciones)';
+      const famId = famParts[2] || '';
+      encoded = encodeFamily(famName, famCount, famId);
+      nameLabel = famName + ' (' + famCount + ' invitaciones)' + (famId ? ' [ID: ' + famId + ']' : '');
     } else {
       const parts = trimmed.split(',').map(function(s) { return s.trim(); });
       let g1 = parts[0] || '';
-      const g2 = parts[1] || '';
+      let g2 = parts[1] || '';
       let allowPlusOne = false;
-      if (!g2) {
-        const plusOneMatch = g1.match(/^(.*?):2$/);
-        if (plusOneMatch) {
-          g1 = plusOneMatch[1].trim();
-          allowPlusOne = true;
+      let id = '';
+
+      if (g2) {
+        // Pair: id (if any) is appended to the second name as "Nombre2:ID"
+        const g2Parts = g2.split(':').map(function(s) { return s.trim(); });
+        g2 = g2Parts[0] || '';
+        id = g2Parts[1] || '';
+      } else {
+        // Single: "Nombre", "Nombre:1" (sin +1), "Nombre:2" (con +1), o "Nombre:1:ID" / "Nombre:2:ID"
+        // El indicador 1/2 es obligatorio si se quiere agregar un ID.
+        const g1Parts = g1.split(':').map(function(s) { return s.trim(); });
+        g1 = g1Parts[0] || '';
+        const rest = g1Parts.slice(1);
+        if (rest.length >= 1) {
+          allowPlusOne = rest[0] === '2';
+          id = rest[1] || '';
         }
       }
-      encoded = encodeGuests(g1, g2, allowPlusOne);
-      nameLabel = g2 ? g1 + ' & ' + g2 : g1 + (allowPlusOne ? ' (+1 permitido)' : '');
+
+      encoded = encodeGuests(g1, g2, allowPlusOne, id);
+      nameLabel = (g2 ? g1 + ' & ' + g2 : g1 + (allowPlusOne ? ' (+1 permitido)' : '')) + (id ? ' [ID: ' + id + ']' : '');
     }
 
     const url = baseUrl + '?i=' + encoded;

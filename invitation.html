@@ -802,6 +802,7 @@ class Component extends DCLogic {
     familyName: '',
     maxAttendees: 0,
     allowPlusOne: false,
+    guestId: '',
     selectedAttendees: null,
     now: Date.now(),
     modalOpen: false,
@@ -839,7 +840,7 @@ class Component extends DCLogic {
     document.body.style.overflow = 'hidden';
 
     const params = new URLSearchParams(window.location.search);
-    let g1 = '', g2 = '', isFamily = false, familyName = '', maxAttendees = 0, allowPlusOne = false;
+    let g1 = '', g2 = '', isFamily = false, familyName = '', maxAttendees = 0, allowPlusOne = false, guestId = '';
     const encoded = params.get('i');
     if (encoded) {
       try {
@@ -849,14 +850,16 @@ class Component extends DCLogic {
           isFamily = true;
           familyName = parts[1] || '';
           maxAttendees = parseInt(parts[2], 10) || 0;
+          guestId = parts[3] || '';
         } else {
           if (parts[0]) g1 = parts[0];
           if (parts[1]) g2 = parts[1];
           if (parseInt(parts[2], 10) === 2) allowPlusOne = true;
+          guestId = parts[3] || '';
         }
       } catch (e) {}
     }
-    this.setState({ guest1: g1, guest2: g2, isFamily, familyName, maxAttendees, allowPlusOne });
+    this.setState({ guest1: g1, guest2: g2, isFamily, familyName, maxAttendees, allowPlusOne, guestId });
 
     setTimeout(() => {
       this.setState({ phase: 1 });
@@ -878,7 +881,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, selectedAttendees, now, modalOpen, modalClosing, confirmed, petals } = this.state;
+    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, guestId, selectedAttendees, now, modalOpen, modalClosing, confirmed, petals } = this.state;
     const diff = Math.max(0, this.weddingTarget - now);
     const pad = n => String(n).padStart(2, '0');
     const countDays = Math.floor(diff / 86400000);
@@ -971,12 +974,16 @@ class Component extends DCLogic {
           bodyMessage = `${guest1} y ${guest2} confirmaron su asistencia.`;
         } else if (showPlusOne) {
           nombre = guest1;
-          bodyMessage = selectedAttendees === 2
+          bodyMessage = selectedAttendees === 1
             ? `${guest1} confirmó su asistencia y vendrá acompañado (+1).`
             : `${guest1} confirmó su asistencia (sin acompañante).`;
         } else {
           nombre = guest1 || 'Invitado';
           bodyMessage = `${nombre} confirmó su asistencia.`;
+        }
+
+        if (guestId) {
+          bodyMessage += `\n\nID: ${guestId}`;
         }
 
         if (window.emailjs) {
@@ -985,12 +992,12 @@ class Component extends DCLogic {
             from_name: nombre,
             from_email: '',
             company: '',
-            topic: `Confirmacion - ${nombre}`,
+            topic: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
             quantity: needsSelection ? String(selectedAttendees) : '',
             message: bodyMessage,
             name: nombre,
             email: '',
-            title: `Confirmacion - ${nombre}`,
+            title: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
             to_email: 'correo@ejemplo.com',
           }).catch(err => console.error('EmailJS error:', err));
         }
