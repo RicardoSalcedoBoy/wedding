@@ -60,6 +60,10 @@
       from { opacity: 0; transform: translateY(16px) scale(0.96); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
+    @keyframes modalFadeOut {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
     @keyframes petalDot {
       0%   { transform: scale(0); opacity: 0; }
       55%  { transform: scale(1.25); opacity: 1; }
@@ -708,7 +712,7 @@
   background: rgba(30,15,20,0.62);
   display: flex; align-items: center; justify-content: center;
   padding: 24px;
-  animation: modalBackdropIn 1.2s ease both;
+  animation: {{ modalBackdropAnim }};
 ">
   <div onClick="{{ stopProp }}" style="
     background: #faf7f1; border: 1px solid #c9a3ae;
@@ -793,6 +797,7 @@ class Component extends DCLogic {
     selectedAttendees: null,
     now: Date.now(),
     modalOpen: false,
+    modalClosing: false,
     confirmed: false,
     petals: [],
   };
@@ -865,7 +870,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, selectedAttendees, now, modalOpen, confirmed, petals } = this.state;
+    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, selectedAttendees, now, modalOpen, modalClosing, confirmed, petals } = this.state;
     const diff = Math.max(0, this.weddingTarget - now);
     const pad = n => String(n).padStart(2, '0');
     const countDays = Math.floor(diff / 86400000);
@@ -922,6 +927,9 @@ class Component extends DCLogic {
       countHours,
       countMinutes,
       modalOpen,
+      modalBackdropAnim: modalClosing
+        ? 'modalFadeOut 1s ease both'
+        : 'modalBackdropIn 1.2s ease both',
       confirmed,
       notConfirmed: !confirmed,
       petals,
@@ -931,12 +939,26 @@ class Component extends DCLogic {
         + (confirmDisabled ? '#c9a3ae' : '#7d2c44')
         + '; color: #f5f0e6; font-family: \'Cormorant Garamond\', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; cursor: '
         + (confirmDisabled ? 'not-allowed' : 'pointer') + ';',
-      openModal: () => this.setState({ modalOpen: true, confirmed: false, selectedAttendees: null }),
-      closeModal: () => this.setState({ modalOpen: false }),
+      openModal: () => {
+        clearTimeout(this._closeTimer);
+        clearTimeout(this._fadeTimer);
+        this.setState({ modalOpen: true, modalClosing: false, confirmed: false, selectedAttendees: null });
+      },
+      closeModal: () => {
+        clearTimeout(this._closeTimer);
+        clearTimeout(this._fadeTimer);
+        this.setState({ modalOpen: false, modalClosing: false });
+      },
       stopProp: e => e.stopPropagation(),
       confirmAttendance: () => {
         if (needsSelection && !selectedAttendees) return;
         this.setState({ confirmed: true });
+        this._closeTimer = setTimeout(() => {
+          this.setState({ modalClosing: true });
+          this._fadeTimer = setTimeout(() => {
+            this.setState({ modalOpen: false, modalClosing: false });
+          }, 1000);
+        }, 2000);
       },
     };
   }
