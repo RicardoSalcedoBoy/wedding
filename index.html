@@ -144,19 +144,13 @@
     text-align: center;
     position: relative;
   " data-screen-label="Hero">
-    <div style="position: absolute; top: 24px; left: 24px; opacity: 0.25;">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
-      </svg>
-    </div>
-    <div style="position: absolute; top: 24px; right: 24px; opacity: 0.25; transform: scaleX(-1);">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
-      </svg>
-    </div>
+    <img src="assets/flores-right.png" alt="" style="position: absolute; top: 0; right: 0; width: 100px; height: auto; pointer-events: none; user-select: none;">
+    <img src="assets/flores-left.png" alt="" style="position: absolute; top: 0; left: 0; width: 80px; height: auto; pointer-events: none; user-select: none;">
+    <img src="assets/flores-bottomright.png" alt="" style="position: absolute; bottom: 0; right: 0; width: 82px; height: auto; pointer-events: none; user-select: none;">
+    <img src="assets/flores-bottomleft.png" alt="" style="position: absolute; bottom: 0; left: 0; width: 150px; height: auto; pointer-events: none; user-select: none;">
 
     <sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
-      <div style="animation: fadeInStay 1.2s ease both;">
+      <div style="position: relative; animation: fadeInStay 1.2s ease both;">
         <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
@@ -269,16 +263,6 @@
       </div>
     </sc-if>
 
-    <div style="position: absolute; bottom: 24px; left: 24px; opacity: 0.25; transform: scaleY(-1);">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
-      </svg>
-    </div>
-    <div style="position: absolute; bottom: 24px; right: 24px; opacity: 0.25; transform: scale(-1);">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
-      </svg>
-    </div>
   </div>
 
   <!-- Section: Details -->
@@ -336,7 +320,7 @@
   " data-screen-label="Save the Date">
     <div style="
       position: absolute; inset: 0;
-      background-image: url('assets/IMG_3179.jpg');
+      background-image: url('assets/pareja-dia.jpeg');
       background-size: cover; background-position: center 30%;
     "></div>
     <div style="
