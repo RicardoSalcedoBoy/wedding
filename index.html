@@ -936,8 +936,97 @@ class Component extends DCLogic {
     }, duration * 1000 + 200);
   };
 
+  // Scroll-scrubbed reveal: each block of text starts hidden (opacity 0, 50px lower,
+  // 95% size) and settles into place as it scrolls up the screen, and hides again if
+  // you scroll back. Progressive enhancement: nothing is hidden unless this runs.
+  startScrollReveal = () => {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};
+
+    const SEL = [
+      '[data-screen-label="La Celebracion"] > *',
+      '[data-screen-label="Save the Date"] > div:last-child > *',
+      '[data-screen-label="Padrinos"] > *',
+      '[data-screen-label="Itinerario"] > div:first-child',
+      '[data-screen-label="Itinerario"] > div:last-child > div:nth-child(odd)',
+      '[data-screen-label="Codigo de vestimenta"] > *',
+      '[data-screen-label="Mapa Iglesia"] > *',
+      '[data-screen-label="Mapa Jardin"] > *',
+      '[data-screen-label="Hospedaje"] > *',
+      '[data-screen-label="Presente"] > *',
+      '[data-screen-label="Confirmar Asistencia"] > div:last-child > *',
+    ].join(',');
+    const START = 0.9;  // element top at 90% of the viewport height -> fully hidden
+    const END = 0.7;    // element top at 70% of the viewport height -> fully shown
+    const TAU = 0.55;   // seconds of smoothing lag (feels like GSAP scrub: 2)
+
+    const known = new WeakMap();
+    let raf = 0, last = 0, alive = true;
+
+    // Layout position that ignores our own transforms, so the effect can't feed back on itself.
+    const layoutTop = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
+
+    const paint = (el, st) => {
+      const cur = st.cur;
+      if (st.painted === cur) return;
+      st.painted = cur;
+      if (cur >= 0.999) {
+        el.style.opacity = '';
+        el.style.transform = '';
+        el.style.willChange = '';
+        return;
+      }
+      const e = 1 - (1 - cur) * (1 - cur);  // power2.out
+      el.style.opacity = e.toFixed(3);
+      el.style.transform = `translateY(${(50 * (1 - e)).toFixed(1)}px) scale(${(0.95 + 0.05 * e).toFixed(4)})`;
+      el.style.willChange = 'opacity, transform';
+    };
+
+    const tick = now => {
+      raf = 0;
+      if (!alive) return;
+      const dt = Math.min(0.1, (now - (last || now)) / 1000);
+      last = now;
+      const vh = window.innerHeight;
+      const sy = window.scrollY;
+      let busy = false;
+
+      document.querySelectorAll(SEL).forEach(el => {
+        const top = layoutTop(el) - sy;
+        const target = Math.max(0, Math.min(1, (START * vh - top) / ((START - END) * vh)));
+        let st = known.get(el);
+        if (!st) { st = { cur: target, painted: -1 }; known.set(el, st); }   // first sight: no animation from 0
+        else if (st.cur !== target) {
+          st.cur += (target - st.cur) * (1 - Math.exp(-dt / TAU));
+          if (Math.abs(target - st.cur) < 0.002) st.cur = target;
+        }
+        if (st.cur !== target) busy = true;
+        paint(el, st);
+      });
+
+      if (busy) schedule();
+    };
+
+    const schedule = () => { if (!raf && alive) raf = requestAnimationFrame(tick); };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    const poll = setInterval(schedule, 1000);   // catches re-mounted blocks and layout shifts
+    schedule();
+
+    return () => {
+      alive = false;
+      cancelAnimationFrame(raf);
+      clearInterval(poll);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      window.removeEventListener('load', schedule);
+    };
+  };
+
   componentDidMount() {
     this._tick = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    this._stopReveal = this.startScrollReveal();
     window.addEventListener('scroll', this.spawnPetal, { passive: true });
     window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
@@ -980,6 +1069,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     clearInterval(this._tick);
+    if (this._stopReveal) this._stopReveal();
     window.removeEventListener('scroll', this.spawnPetal);
   }
 
