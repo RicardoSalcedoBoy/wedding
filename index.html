@@ -137,21 +137,26 @@
 
   <!-- Hero section -->
   <div style="
-    min-height: 480px;
-    overflow: hidden;
+    min-height: 100vh;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 60px 40px 80px;
+    padding: 60px 40px;
     text-align: center;
     position: relative;
   " data-screen-label="Hero">
-    <img src="assets/flores-right.png" alt="" style="position: absolute; top: 0; right: 0; width: 101px; height: auto; pointer-events: none; user-select: none;">
-    <img src="assets/flores-left.png" alt="" style="position: absolute; top: 11px; left: 0; width: 109px; height: auto; pointer-events: none; user-select: none;">
-    <img src="assets/flores-bottomright.png" alt="" style="position: absolute; bottom: 0; right: 0; width: 88px; height: auto; pointer-events: none; user-select: none;">
-    <img src="assets/flores-bottomleft.png" alt="" style="position: absolute; bottom: 0; left: 34px; width: 106px; height: auto; pointer-events: none; user-select: none;">
+    <div style="position: absolute; top: 24px; left: 24px; opacity: 0.25;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div style="position: absolute; top: 24px; right: 24px; opacity: 0.25; transform: scaleX(-1);">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
 
     <sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
-      <div style="position: relative; animation: fadeInStay 1.2s ease both;">
+      <div style="animation: fadeInStay 1.2s ease both;">
         <sc-if value="{{ noGuest }}" hint-placeholder-val="{{ false }}">
         <p style="
           font-size: 19px; font-weight: 300; font-style: italic;
@@ -264,6 +269,16 @@
       </div>
     </sc-if>
 
+    <div style="position: absolute; bottom: 24px; left: 24px; opacity: 0.25; transform: scaleY(-1);">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div style="position: absolute; bottom: 24px; right: 24px; opacity: 0.25; transform: scale(-1);">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M4 44 Q4 4 44 4" stroke="#8f2d56" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
   </div>
 
   <!-- Section: Details -->
