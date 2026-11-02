@@ -28,8 +28,9 @@
     color: #a4668a; margin-bottom: 28px;
   }
   .title {
-    font-size: 40px; font-weight: 300; font-style: italic;
-    line-height: 1.15; color: #3d3733; margin-bottom: 24px;
+    font-size: 30px; font-weight: 300; font-style: italic;
+    text-transform: uppercase; letter-spacing: 4px;
+    line-height: 1.2; color: #3d3733; margin-bottom: 24px;
   }
   .intro {
     font-size: 18px; font-weight: 300; font-style: italic;
@@ -50,8 +51,23 @@
     color: #a4668a; margin-bottom: 36px;
   }
   .place {
+    display: block;
     font-size: 24px; font-weight: 300; font-style: italic;
     line-height: 1.4; color: #3d3733;
+    text-decoration: underline; text-decoration-color: #d0a6bd;
+    text-decoration-thickness: 1px; text-underline-offset: 7px;
+    transition: color 0.3s;
+  }
+  .place:hover { color: #8f2d56; }
+  @keyframes petalFloat {
+    0%   { opacity: 1; transform: translateY(0); }
+    65%  { opacity: 0.85; transform: translateY(-14px); }
+    100% { opacity: 0; transform: translateY(-72px); }
+  }
+  @keyframes petalDot {
+    0%   { transform: scale(0); opacity: 0; }
+    55%  { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.85; }
   }
   .divider {
     width: 24px; height: 1px; background: #d0a6bd;
@@ -82,31 +98,31 @@
 
   <div class="section">
     <div class="section-title">Desayunos</div>
-    <div class="place">Lu Desayunos</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=LU+Desayunos+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Lu Desayunos</a>
     <div class="divider"></div>
-    <div class="place">Cafe 27</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Cafe+27+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Cafe 27</a>
     <div class="divider"></div>
-    <div class="place">El Anzuelo (Taco Fish)</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=El+Anzuelo+Taco+Fish+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">El Anzuelo (Taco Fish)</a>
     <div class="divider"></div>
-    <div class="place">Tacos El Chino (de Cabeza)</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Tacos+El+Chino+de+Cabeza+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Tacos El Chino (de Cabeza)</a>
   </div>
 
   <div class="section alt">
     <div class="section-title">Comidas</div>
-    <div class="place">La Cura Mariscos</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=La+Cura+Mariscos+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">La Cura Mariscos</a>
     <div class="divider"></div>
-    <div class="place">Dos Desiertos</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Dos+Desiertos+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Dos Desiertos</a>
     <div class="divider"></div>
-    <div class="place">Holy Cow</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Holy+Cow+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Holy Cow</a>
   </div>
 
   <div class="section">
     <div class="section-title">Cenas</div>
-    <div class="place">Gastronora</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Gastronora+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Gastronora</a>
     <div class="divider"></div>
-    <div class="place">Parque La Ruina</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Parque+La+Ruina+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Parque La Ruina</a>
     <div class="divider"></div>
-    <div class="place">Los Tacos de Armando</div>
+    <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Los+Tacos+de+Armando+Hermosillo+Sonora" target="_blank" rel="noopener noreferrer">Los Tacos de Armando</a>
   </div>
 
   <div class="back-wrap">
@@ -114,5 +130,80 @@
   </div>
 
 </div>
+
+<!-- Pétalos flotantes que aparecen al hacer scroll (mismo efecto que la invitación) -->
+<div id="petals" style="position: fixed; inset: 0; z-index: 3; overflow: hidden; pointer-events: none;"></div>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Pétalos: florecitas que aparecen y se desvanecen al hacer scroll ---- */
+  var box = document.getElementById('petals');
+  var colors = ['#d0a6bd', '#c8829f', '#93a17f', '#e0c5d3'];
+  var lastSpawn = 0;
+  function spawnPetal() {
+    var t = Date.now();
+    if (t - lastSpawn < 260) return;
+    lastSpawn = t;
+    var size = Math.round(14 + Math.random() * 14);
+    var duration = (4 + Math.random() * 2.5).toFixed(1);
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    var el = document.createElement('div');
+    el.style.cssText = 'position:absolute; left:' + (5 + Math.random() * 90).toFixed(1) + 'vw; top:' + (5 + Math.random() * 85).toFixed(1) +
+      'vh; opacity:0; animation: petalFloat ' + duration + 's ease-out forwards;';
+    var dots = [[10,10,2.5,0],[10,3,1.6,0.12],[10,17,1.6,0.2],[3,10,1.6,0.28],[17,10,1.6,0.36]];
+    el.innerHTML = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 20 20" fill="none">' + dots.map(function (d) {
+      return '<g style="transform-origin:' + d[0] + 'px ' + d[1] + 'px; animation: petalDot 0.5s ease-out ' + d[3] + 's both;">' +
+             '<circle cx="' + d[0] + '" cy="' + d[1] + '" r="' + d[2] + '" fill="' + color + '"/></g>';
+    }).join('') + '</svg>';
+    box.appendChild(el);
+    while (box.children.length > 14) box.removeChild(box.firstChild);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, duration * 1000 + 200);
+  }
+  if (!reduce) window.addEventListener('scroll', spawnPetal, { passive: true });
+
+  /* ---- Texto que aparece suavemente al subir por la pantalla (igual que la invitación) ---- */
+  if (reduce) return;
+  var SEL = '.head > *, .section > *, .back-wrap > *';
+  var START = 0.9, END = 0.7, TAU = 0.55;
+  var known = new WeakMap(), raf = 0, last = 0;
+  function layoutTop(el) { var y = 0; for (var n = el; n; n = n.offsetParent) y += n.offsetTop; return y; }
+  function paint(el, st) {
+    var cur = st.cur;
+    if (st.painted === cur) return;
+    st.painted = cur;
+    if (cur >= 0.999) { el.style.opacity = ''; el.style.transform = ''; el.style.willChange = ''; return; }
+    var e = 1 - (1 - cur) * (1 - cur);
+    el.style.opacity = e.toFixed(3);
+    el.style.transform = 'translateY(' + (50 * (1 - e)).toFixed(1) + 'px) scale(' + (0.95 + 0.05 * e).toFixed(4) + ')';
+    el.style.willChange = 'opacity, transform';
+  }
+  function tick(now) {
+    raf = 0;
+    var dt = Math.min(0.1, (now - (last || now)) / 1000);
+    last = now;
+    var vh = window.innerHeight, sy = window.scrollY, busy = false;
+    document.querySelectorAll(SEL).forEach(function (el) {
+      var top = layoutTop(el) - sy;
+      var target = Math.max(0, Math.min(1, (START * vh - top) / ((START - END) * vh)));
+      var st = known.get(el);
+      if (!st) { st = { cur: target, painted: -1 }; known.set(el, st); }
+      else if (st.cur !== target) {
+        st.cur += (target - st.cur) * (1 - Math.exp(-dt / TAU));
+        if (Math.abs(target - st.cur) < 0.002) st.cur = target;
+      }
+      if (st.cur !== target) busy = true;
+      paint(el, st);
+    });
+    if (busy) schedule();
+  }
+  function schedule() { if (!raf) raf = requestAnimationFrame(tick); }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('load', schedule);
+  schedule();
+})();
+</script>
 </body>
 </html>
