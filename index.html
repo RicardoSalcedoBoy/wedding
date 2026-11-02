@@ -722,7 +722,7 @@
       font-size: 18px; font-weight: 300; font-style: italic;
       line-height: 1.9; color: #3d3733;
       max-width: 340px; margin: 44px auto 28px;
-    ">¡Te dejamos algunos lugares para comer cercanos que son de nuestros favoritos!</p>
+    ">¡Te dejamos algunos lugares cercanos para comer que son de nuestros favoritos!</p>
 
     <a href="recomendaciones.html" style="
       display: inline-block;
@@ -1221,10 +1221,6 @@ class Component extends DCLogic {
             to_email: 'correo@ejemplo.com',
           }).catch(err => console.error('EmailJS error:', err));
         }
-
-        // WhatsApp: abre el chat con el mensaje prellenado; el invitado solo debe pulsar enviar
-        const waText = '¡Confirmo Asistencía para el día de su boda! 🥂🎂💍🎉';
-        window.open('https://wa.me/520000000000?text=' + encodeURIComponent(waText), '_blank', 'noopener');
 
         this._closeTimer = setTimeout(() => {
           this.setState({ modalClosing: true });
