@@ -1,4 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <circle cx="96" cy="96" r="96" fill="#2b1421"/>
-  <text x="96" y="120" text-anchor="middle" font-family="'Cormorant Garamond', Didot, 'Bodoni 72', Georgia, serif" font-style="italic" font-weight="300" font-size="84" letter-spacing="2" fill="#f6f1ec">JR</text>
+  <text x="96" y="120" text-anchor="middle" font-family="'Cormorant Garamond', Didot, 'Bodoni 72', Georgia, serif" font-style="italic" font-weight="300" font-size="96" letter-spacing="2" fill="#ffffff">JR</text>
 </svg>
