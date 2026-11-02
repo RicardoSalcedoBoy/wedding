@@ -1199,6 +1199,10 @@ class Component extends DCLogic {
           }).catch(err => console.error('EmailJS error:', err));
         }
 
+        // WhatsApp: abre el chat con el mensaje prellenado; el invitado solo debe pulsar enviar
+        const waText = '¡Confirmo Asistencía para el día de su boda! 🥂🎂💍🎉';
+        window.open('https://wa.me/520000000000?text=' + encodeURIComponent(waText), '_blank', 'noopener');
+
         this._closeTimer = setTimeout(() => {
           this.setState({ modalClosing: true });
           this._fadeTimer = setTimeout(() => {
