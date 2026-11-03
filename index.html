@@ -1209,16 +1209,11 @@ class Component extends DCLogic {
         if (window.emailjs) {
           emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
           emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
-            from_name: nombre,
-            from_email: '',
-            company: '',
-            topic: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
-            quantity: needsSelection ? String(selectedAttendees) : '',
-            message: bodyMessage,
-            name: nombre,
-            email: '',
             title: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
-            to_email: 'correo@ejemplo.com',
+            name: nombre,
+            from_name: nombre,
+            message: bodyMessage,
+            email: '',
           }).catch(err => console.error('EmailJS error:', err));
         }
 
