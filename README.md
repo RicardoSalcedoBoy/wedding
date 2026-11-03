@@ -1,22 +1,32 @@
-# CODING AGENTS: READ THIS FIRST
+# Invitación de boda · Jessica & Ricardo
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Invitación interactiva para la boda del 19 de marzo de 2027 en Hermosillo, Sonora.
+Sitio estático publicado en GitHub Pages: https://ricardoyjessica.com/
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Archivos
 
-## What you should do — IMPORTANT
+- `index.html` — la invitación (formato DC, usa `support.js`).
+- `recomendaciones.html` — lugares para comer, con enlaces a Google Maps.
+- `generador.html` — genera los enlaces y códigos QR personalizados de cada invitado.
+- `assets/` — fotos, flores, iconos y la imagen de vista previa (`og.jpg`).
 
-**Read `invitaci-n-de-boda-interactiva/project/Invitacion.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Enlaces personalizados
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+El parámetro `?i=` es un base64 con campos separados por `|`:
 
-## About the design files
+- Individual o pareja: `invitado1|invitado2|2 si lleva +1|ID`
+- Familia: `FAM|nombre|número de invitaciones|ID`
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+Cada invitado lleva un ID. Sin ID (o con datos incompletos) la confirmación se
+muestra igual, pero **no se envía el correo**.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Confirmación por correo
 
-## Bundle contents
+Se envía con EmailJS desde el navegador. El destinatario se configura en la
+plantilla de EmailJS, no en el código.
 
-- `invitaci-n-de-boda-interactiva/README.md` — this file
-- `invitaci-n-de-boda-interactiva/project/` — the `Invitación de boda interactiva` project files (HTML prototypes, assets, components)
+## Probar en local
+
+```bash
+npx serve . -l 8082
+```
