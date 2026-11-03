@@ -1206,7 +1206,15 @@ class Component extends DCLogic {
           bodyMessage += `\n\nID: ${guestId}`;
         }
 
-        if (window.emailjs) {
+        // Seguridad: solo se envía el correo si el enlace trae un invitado completo
+        // (nombre, o familia con su número de invitaciones, y un ID). Si falta algo
+        // —sin parámetro ?i=, enlace alterado o incompleto— el botón funciona pero no se manda nada.
+        const guestKnown = isFamily
+          ? !!familyName && maxAttendees > 0 && Number(selectedAttendees) >= 1 && Number(selectedAttendees) <= maxAttendees
+          : !!guest1;
+        const canSendEmail = guestKnown && !!guestId;
+
+        if (canSendEmail && window.emailjs) {
           emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
           emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
             title: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
