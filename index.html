@@ -28,6 +28,8 @@
     window.EMAILJS_PUBLIC_KEY  = "qYxnwItd7hHFgV6QK";
     window.EMAILJS_SERVICE_ID  = "service_3iw5hij";
     window.EMAILJS_TEMPLATE_ID = "template_5jevn7a";
+    // Interruptor del correo de confirmación: false = no se envía ningún correo (solo WhatsApp).
+    window.EMAIL_ENABLED = false;
     if (window.emailjs) emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1224,7 +1226,7 @@ class Component extends DCLogic {
           : !!guest1;
         const canSendEmail = guestKnown && !!guestId;
 
-        if (canSendEmail && window.emailjs) {
+        if (window.EMAIL_ENABLED && canSendEmail && window.emailjs) {
           emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
           emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
             title: `Confirmacion - ${nombre}` + (guestId ? ` (${guestId})` : ''),
