@@ -524,7 +524,7 @@
       color: #a4668a; margin-bottom: 28px;
     ">Código de vestimenta</div>
     <div style="font-size: 28px; font-style: italic; color: #3d3733; font-weight: 300;">Formal</div>
-    <div style="font-size: 14px; font-style: italic; color: #94566f; margin-top: 12px; line-height: 1.6;">Favor de evitar tonalidades de blancos y beiges</div>
+    <div style="font-size: 14px; font-style: italic; color: #94566f; margin-top: 12px; line-height: 1.6;">Te pedimos de favor no vestir en blancos ni beiges</div>
   </div>
 
   <!-- Section: Map — Iglesia -->
@@ -1238,7 +1238,11 @@ class Component extends DCLogic {
         }
 
         // WhatsApp: abre el chat con el mensaje prellenado; el invitado solo debe pulsar enviar
-        const waText = '¡Confirmo Asistencía para el día de su boda! 🥂🎂💍🎉';
+        // Enlace personalizado (invitado completo): mensaje como antes. Visita general sin enlace:
+        // el mensaje trae un espacio para que la persona escriba su nombre.
+        const waText = canSendEmail
+          ? '¡Confirmo Asistencía para el día de su boda! 🥂🎂💍🎉'
+          : '¡Confirmo mi asistencia a tu boda, a nombre de ______! 🥂🎂💍🎉';
         window.open('https://wa.me/526623436459?text=' + encodeURIComponent(waText), '_blank', 'noopener');
 
         this._closeTimer = setTimeout(() => {
