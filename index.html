@@ -109,19 +109,19 @@
     .flor-bl { -webkit-mask-image: radial-gradient(ellipse at 0% 100%, #000 var(--r), transparent calc(var(--r) + 25%)); mask-image: radial-gradient(ellipse at 0% 100%, #000 var(--r), transparent calc(var(--r) + 25%)); animation-delay: 1.1s; }
     @media (prefers-reduced-motion: reduce) { .flor { animation: none; -webkit-mask-image: none; mask-image: none; } }
 
-    /* Carrusel de "Save the Date": 4 fotos, 5 s cada una, con cruce suave */
+    /* Carrusel de "Save the Date": 6 fotos, 5 s cada una (ciclo de 30 s), con cruce suave */
     @keyframes saveSlide {
-      0%   { opacity: 0; }
-      6%   { opacity: 1; }
-      25%  { opacity: 1; }
-      31%  { opacity: 0; }
-      100% { opacity: 0; }
+      0%      { opacity: 0; }
+      4%      { opacity: 1; }
+      16.667% { opacity: 1; }
+      20.667% { opacity: 0; }
+      100%    { opacity: 0; }
     }
     .slide {
       position: absolute; inset: 0;
       background-size: cover; background-position: center 30%;
       opacity: 0;
-      animation: saveSlide 20s linear infinite;
+      animation: saveSlide 30s linear infinite;
     }
   </style>
 </helmet>
@@ -367,7 +367,9 @@
       <div class="slide" style="background-image: url('assets/pareja-dia.jpeg'); animation-delay: 0s;"></div>
       <div class="slide" style="background-image: url('assets/save-2.jpg'); animation-delay: 5s;"></div>
       <div class="slide" style="background-image: url('assets/save-3.jpg'); animation-delay: 10s;"></div>
-      <div class="slide" style="background-image: url('assets/save-4.jpg'); animation-delay: 15s;"></div>
+      <div class="slide" style="background-image: url('assets/save-5.jpg'); animation-delay: 15s;"></div>
+      <div class="slide" style="background-image: url('assets/save-6.jpg'); animation-delay: 20s;"></div>
+      <div class="slide" style="background-image: url('assets/save-4.jpg'); animation-delay: 25s;"></div>
     </div>
     <div style="
       position: absolute; inset: 0;
