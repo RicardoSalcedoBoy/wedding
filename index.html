@@ -1031,15 +1031,15 @@ class Component extends DCLogic {
 
   playMusic = () => {
     if (!this._audio) {
-      const a = new Audio('assets/musica.m4a');
+      const a = new Audio(this._musicUrl || 'assets/musica.m4a');
       a.loop = true;
       a.preload = 'auto';
-      a.volume = 0;
+      a.volume = 0.2;
       this._audio = a;
     }
     const started = this._audio.play();
     return Promise.resolve(started).then(() => {
-      this.fadeMusicTo(0.7, 3000);
+      this.fadeMusicTo(0.7, 1200);
       this.setState({ musicOn: true });
       return true;
     }).catch(() => false);
@@ -1061,6 +1061,12 @@ class Component extends DCLogic {
     let pref = null;
     try { pref = localStorage.getItem('musica'); } catch (e) {}
     this._musicMuted = pref === 'off';
+    // Se baja el archivo desde que carga la página, para que al primer toque suene casi al instante
+    if (!this._musicMuted && window.fetch) {
+      fetch('assets/musica.m4a').then(r => (r.ok ? r.blob() : null)).then(b => {
+        if (b) this._musicUrl = URL.createObjectURL(b);
+      }).catch(() => {});
+    }
     this._firstTap = () => {
       if (this._musicMuted || this.state.musicOn) return;
       this.playMusic().then(ok => { if (ok) this.removeMusicListeners(); });
