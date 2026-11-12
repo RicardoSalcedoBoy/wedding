@@ -964,6 +964,31 @@
   </sc-for>
 </div>
 
+<!-- Botón de música: pausa o reanuda la música de fondo -->
+<sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ toggleMusic }}" aria-label="Música de fondo" title="Música" style="
+  position: fixed; bottom: 20px; right: max(16px, calc(50vw - 199px)); z-index: 4;
+  width: 42px; height: 42px; padding: 0; border-radius: 50%;
+  border: 1px solid #d0a6bd; background: rgba(251,245,241,0.92);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+">
+  <sc-if value="{{ musicOn }}" hint-placeholder-val="{{ false }}">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8f2d56" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/>
+    <path d="M15.5 9.2a4 4 0 0 1 0 5.6"/>
+    <path d="M18 6.8a7.5 7.5 0 0 1 0 10.4"/>
+  </svg>
+  </sc-if>
+  <sc-if value="{{ musicOff }}" hint-placeholder-val="{{ true }}">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8f2d56" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/>
+    <path d="M16 9.5l5 5"/>
+    <path d="M21 9.5l-5 5"/>
+  </svg>
+  </sc-if>
+</button>
+</sc-if>
+
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
@@ -982,12 +1007,78 @@ class Component extends DCLogic {
     modalClosing: false,
     confirmed: false,
     petals: [],
+    musicOn: false,
   };
 
   weddingTarget = new Date('2027-03-19T15:00:00').getTime();
   petalColors = ['#d0a6bd', '#c8829f', '#93a17f', '#e0c5d3'];
   petalId = 0;
   lastPetalSpawn = 0;
+
+  // Música de fondo (muy suave). Los navegadores no permiten sonido automático: arranca con el
+  // primer toque del invitado y sube poco a poco. El botón la pausa o la reanuda y recuerda la elección.
+  fadeMusicTo = (target, ms, done) => {
+    clearInterval(this._musicFade);
+    const a = this._audio;
+    if (!a) return;
+    const from = a.volume, t0 = performance.now();
+    this._musicFade = setInterval(() => {
+      const k = Math.min(1, (performance.now() - t0) / ms);
+      a.volume = from + (target - from) * k;
+      if (k >= 1) { clearInterval(this._musicFade); if (done) done(); }
+    }, 50);
+  };
+
+  playMusic = () => {
+    if (!this._audio) {
+      const a = new Audio('assets/musica.m4a');
+      a.loop = true;
+      a.preload = 'auto';
+      a.volume = 0;
+      this._audio = a;
+    }
+    const started = this._audio.play();
+    return Promise.resolve(started).then(() => {
+      this.fadeMusicTo(0.7, 3000);
+      this.setState({ musicOn: true });
+      return true;
+    }).catch(() => false);
+  };
+
+  pauseMusic = () => {
+    this.setState({ musicOn: false });
+    this.fadeMusicTo(0, 800, () => { if (this._audio) this._audio.pause(); });
+  };
+
+  saveMusicPref = off => { try { localStorage.setItem('musica', off ? 'off' : 'on'); } catch (e) {} };
+
+  toggleMusic = () => {
+    if (this.state.musicOn) { this._musicMuted = true; this.saveMusicPref(true); this.pauseMusic(); }
+    else { this._musicMuted = false; this.saveMusicPref(false); this.playMusic(); }
+  };
+
+  initMusic = () => {
+    let pref = null;
+    try { pref = localStorage.getItem('musica'); } catch (e) {}
+    this._musicMuted = pref === 'off';
+    this._firstTap = () => {
+      if (this._musicMuted || this.state.musicOn) return;
+      this.playMusic().then(ok => { if (ok) this.removeMusicListeners(); });
+    };
+    this._musicEvents = ['touchend', 'click', 'keydown'];
+    this._musicEvents.forEach(ev => window.addEventListener(ev, this._firstTap, { passive: true }));
+    this._onVisibility = () => {
+      const a = this._audio;
+      if (!a) return;
+      if (document.hidden) a.pause();
+      else if (this.state.musicOn && !this._musicMuted) a.play().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', this._onVisibility);
+  };
+
+  removeMusicListeners = () => {
+    (this._musicEvents || []).forEach(ev => window.removeEventListener(ev, this._firstTap));
+  };
 
   spawnPetal = () => {
     const t = Date.now();
@@ -1098,6 +1189,7 @@ class Component extends DCLogic {
     this._tick = setInterval(() => this.setState({ now: Date.now() }), 1000);
     this._stopReveal = this.startScrollReveal();
     window.addEventListener('scroll', this.spawnPetal, { passive: true });
+    this.initMusic();
     window.scrollTo(0, 0);
     document.body.style.overflow = 'hidden';
 
@@ -1141,10 +1233,14 @@ class Component extends DCLogic {
     clearInterval(this._tick);
     if (this._stopReveal) this._stopReveal();
     window.removeEventListener('scroll', this.spawnPetal);
+    this.removeMusicListeners();
+    document.removeEventListener('visibilitychange', this._onVisibility);
+    clearInterval(this._musicFade);
+    if (this._audio) this._audio.pause();
   }
 
   renderVals() {
-    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, guestId, selectedAttendees, now, modalOpen, modalClosing, confirmed, petals } = this.state;
+    const { phase, guest1, guest2, isFamily, familyName, maxAttendees, allowPlusOne, guestId, selectedAttendees, now, modalOpen, modalClosing, confirmed, petals, musicOn } = this.state;
     const diff = Math.max(0, this.weddingTarget - now);
     const pad = n => String(n).padStart(2, '0');
     const countDays = Math.floor(diff / 86400000);
@@ -1209,6 +1305,9 @@ class Component extends DCLogic {
       confirmed,
       notConfirmed: !confirmed,
       petals,
+      musicOn,
+      musicOff: !musicOn,
+      toggleMusic: this.toggleMusic,
       attendeeOptions,
       confirmDisabled,
       confirmButtonStyle: 'width: 100%; padding: 16px; border: 1px solid #8f2d56; background: '
