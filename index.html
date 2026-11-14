@@ -111,6 +111,10 @@
     @media (prefers-reduced-motion: reduce) { .flor { animation: none; -webkit-mask-image: none; mask-image: none; } }
 
     /* Carrusel de "Save the Date": 6 fotos, 5 s cada una (ciclo de 30 s), con cruce suave */
+    @keyframes musicPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(143, 45, 86, 0.30); }
+      50%      { box-shadow: 0 0 0 9px rgba(143, 45, 86, 0); }
+    }
     @keyframes saveSlide {
       0%      { opacity: 0; }
       4%      { opacity: 1; }
@@ -968,9 +972,9 @@
 </div>
 
 <!-- Botón de música: pausa o reanuda la música de fondo -->
-<sc-if value="{{ showHero }}" hint-placeholder-val="{{ false }}">
 <button onClick="{{ toggleMusic }}" aria-label="Música de fondo" title="Música" style="
-  position: fixed; bottom: 20px; right: max(16px, calc(50vw - 199px)); z-index: 4;
+  position: fixed; bottom: 20px; right: max(16px, calc(50vw - 199px)); z-index: 150;
+  animation: {{ musicBtnAnim }};
   width: 42px; height: 42px; padding: 0; border-radius: 50%;
   border: 1px solid #d0a6bd; background: rgba(251,245,241,0.92);
   display: flex; align-items: center; justify-content: center; cursor: pointer;
@@ -990,7 +994,6 @@
   </svg>
   </sc-if>
 </button>
-</sc-if>
 
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -1341,6 +1344,7 @@ class Component extends DCLogic {
       petals,
       musicOn,
       musicOff: !musicOn,
+      musicBtnAnim: musicOn ? 'none' : 'musicPulse 2.4s ease-in-out infinite',
       toggleMusic: this.toggleMusic,
       attendeeOptions,
       confirmDisabled,
