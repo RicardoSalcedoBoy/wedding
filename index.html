@@ -1037,13 +1037,13 @@ class Component extends DCLogic {
       const a = new Audio(this._musicUrl || 'assets/musica.m4a');
       a.loop = true;
       a.preload = 'auto';
-      a.volume = 0.2;
+      a.volume = 0.4;
       this._audio = a;
     }
-    if (this._audio.volume < 0.2) this._audio.volume = 0.2;
+    if (this._audio.volume < 0.4) this._audio.volume = 0.4;
     const started = this._audio.play();
     return Promise.resolve(started).then(() => {
-      this.fadeMusicTo(0.7, 1200);
+      this.fadeMusicTo(0.7, 600);
       this.setState({ musicOn: true });
       this.removeMusicListeners();
       return true;
@@ -1072,7 +1072,7 @@ class Component extends DCLogic {
           const a = new Audio(this._musicUrl);
           a.loop = true;
           a.preload = 'auto';
-          a.volume = 0.2;
+          a.volume = 0.4;
           this._audio = a;
         }
       }).catch(() => {});
