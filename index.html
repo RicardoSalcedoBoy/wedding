@@ -1040,10 +1040,12 @@ class Component extends DCLogic {
       a.volume = 0.2;
       this._audio = a;
     }
+    if (this._audio.volume < 0.2) this._audio.volume = 0.2;
     const started = this._audio.play();
     return Promise.resolve(started).then(() => {
       this.fadeMusicTo(0.7, 1200);
       this.setState({ musicOn: true });
+      this.removeMusicListeners();
       return true;
     }).catch(() => false);
   };
@@ -1053,26 +1055,36 @@ class Component extends DCLogic {
     this.fadeMusicTo(0, 800, () => { if (this._audio) this._audio.pause(); });
   };
 
-  saveMusicPref = off => { try { localStorage.setItem('musica', off ? 'off' : 'on'); } catch (e) {} };
-
+  // Al picar la bocina, la música empieza de inmediato (el archivo ya está descargado y listo).
   toggleMusic = () => {
-    if (this.state.musicOn) { this._musicMuted = true; this.saveMusicPref(true); this.pauseMusic(); }
-    else { this._musicMuted = false; this.saveMusicPref(false); this.playMusic(); }
+    if (this.state.musicOn) { this._musicMuted = true; this.pauseMusic(); }
+    else { this._musicMuted = false; this.playMusic(); }
   };
 
   initMusic = () => {
-    let pref = null;
-    try { pref = localStorage.getItem('musica'); } catch (e) {}
-    this._musicMuted = pref === 'off';
-    // Se baja el archivo desde que carga la página, para que al primer toque suene casi al instante
-    if (!this._musicMuted && window.fetch) {
+    this._musicMuted = false;
+    // Se baja el archivo y se deja listo desde que carga la página, para que suene sin esperar
+    if (window.fetch) {
       fetch('assets/musica.m4a').then(r => (r.ok ? r.blob() : null)).then(b => {
-        if (b) this._musicUrl = URL.createObjectURL(b);
+        if (!b) return;
+        this._musicUrl = URL.createObjectURL(b);
+        if (!this._audio) {
+          const a = new Audio(this._musicUrl);
+          a.loop = true;
+          a.preload = 'auto';
+          a.volume = 0.2;
+          this._audio = a;
+        }
       }).catch(() => {});
     }
+    // Intento automático a los 3 s de cargar la página. Muchos navegadores (sobre todo en celular)
+    // bloquean el sonido automático; si lo bloquean, arranca con el primer toque del invitado.
+    this._autoMusic = setTimeout(() => {
+      if (!this._musicMuted && !this.state.musicOn) this.playMusic();
+    }, 3000);
     this._firstTap = () => {
       if (this._musicMuted || this.state.musicOn) return;
-      this.playMusic().then(ok => { if (ok) this.removeMusicListeners(); });
+      this.playMusic();
     };
     this._musicEvents = ['touchend', 'click', 'keydown'];
     this._musicEvents.forEach(ev => window.addEventListener(ev, this._firstTap, { passive: true }));
@@ -1245,6 +1257,7 @@ class Component extends DCLogic {
     this.removeMusicListeners();
     document.removeEventListener('visibilitychange', this._onVisibility);
     clearInterval(this._musicFade);
+    clearTimeout(this._autoMusic);
     if (this._audio) this._audio.pause();
   }
 
