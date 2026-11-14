@@ -16,6 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preload" href="assets/musica.m4a" as="fetch" type="audio/mp4" crossorigin fetchpriority="high">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -365,11 +366,11 @@
   " data-screen-label="Save the Date">
     <div style="position: absolute; inset: 0; background: #2b1421;">
       <div class="slide" style="background-image: url('assets/pareja-dia.jpeg'); animation-delay: 0s;"></div>
-      <div class="slide" style="background-image: url('assets/save-2.jpg'); animation-delay: 5s;"></div>
-      <div class="slide" style="background-image: url('assets/save-3.jpg'); animation-delay: 10s;"></div>
-      <div class="slide" style="background-image: url('assets/save-5.jpg'); animation-delay: 15s;"></div>
-      <div class="slide" style="background-image: url('assets/save-6.jpg'); animation-delay: 20s;"></div>
-      <div class="slide" style="background-image: url('assets/save-4.jpg'); animation-delay: 25s;"></div>
+      <div class="slide" data-bg="assets/save-2.jpg" style="animation-delay: 5s;"></div>
+      <div class="slide" data-bg="assets/save-3.jpg" style="animation-delay: 10s;"></div>
+      <div class="slide" data-bg="assets/save-5.jpg" style="animation-delay: 15s;"></div>
+      <div class="slide" data-bg="assets/save-6.jpg" style="animation-delay: 20s;"></div>
+      <div class="slide" data-bg="assets/save-4.jpg" style="animation-delay: 25s;"></div>
     </div>
     <div style="
       position: absolute; inset: 0;
@@ -839,9 +840,8 @@
   " data-screen-label="Confirmar Asistencia">
     <div style="
       position: absolute; inset: 0;
-      background-image: url('assets/pareja-noche.jpeg');
       background-size: cover; background-position: center top;
-    "></div>
+    " data-bg="assets/pareja-noche.jpeg"></div>
     <div style="
       position: absolute; inset: 0;
       background: linear-gradient(180deg, rgba(15,8,12,0.5) 0%, rgba(15,8,12,0.8) 100%);
@@ -1061,6 +1061,13 @@ class Component extends DCLogic {
     else { this._musicMuted = false; this.playMusic(); }
   };
 
+  loadDeferredImages = () => {
+    document.querySelectorAll('[data-bg]').forEach(el => {
+      const src = el.getAttribute('data-bg');
+      if (src) { el.style.backgroundImage = "url('" + src + "')"; el.removeAttribute('data-bg'); }
+    });
+  };
+
   initMusic = () => {
     this._musicMuted = false;
     // Se baja el archivo y se deja listo desde que carga la página, para que suene sin esperar
@@ -1075,13 +1082,17 @@ class Component extends DCLogic {
           a.volume = 0.4;
           this._audio = a;
         }
-      }).catch(() => {});
+      }).catch(() => {}).then(() => this.loadDeferredImages());
     }
+    // Las fotos que no se ven al abrir (carrusel y confirmación) se piden cuando la música ya está
+    // lista, o a los 4 s como máximo, para que no le quiten ancho de banda al audio.
+    this._deferTimer = setTimeout(this.loadDeferredImages, 4000);
     // Intento automático a los 3 s de cargar la página. Muchos navegadores (sobre todo en celular)
     // bloquean el sonido automático; si lo bloquean, arranca con el primer toque del invitado.
+    const sinceLoad = (window.performance && performance.now) ? performance.now() : 0;
     this._autoMusic = setTimeout(() => {
       if (!this._musicMuted && !this.state.musicOn) this.playMusic();
-    }, 3000);
+    }, Math.max(300, 3000 - sinceLoad));
     this._firstTap = () => {
       if (this._musicMuted || this.state.musicOn) return;
       this.playMusic();
@@ -1258,6 +1269,7 @@ class Component extends DCLogic {
     document.removeEventListener('visibilitychange', this._onVisibility);
     clearInterval(this._musicFade);
     clearTimeout(this._autoMusic);
+    clearTimeout(this._deferTimer);
     if (this._audio) this._audio.pause();
   }
 
